@@ -1,0 +1,4 @@
+test/
+old/
+config.py
+test*.py
