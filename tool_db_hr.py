@@ -18,6 +18,16 @@ class db_hr(): #讀取excel 單一零件
             print(SQL)
             logging.warning('error class db_ab().def runsql()! 無法執行SQL!')
 
+    def runsql_rpt(self, SQL):
+        try:
+            cur = self.rpt.cursor()
+            cur.execute(SQL) #執行
+            cur.commit() #更新
+            cur.close() #關閉
+        except:
+            print(SQL)
+            logging.warning('error class db_ab().def runsql()! 無法執行SQL!')
+
     def get_database_ps(self):
         s = "SELECT ps01,ps02,ps03,ps11,ps12,ps31,ps52 FROM rec_ps ORDER BY ps01"
         df = pd.read_sql(s, self.cn) #轉pd
@@ -100,11 +110,14 @@ class db_hr(): #讀取excel 單一零件
 
 def test2(): #添加欄位
     pass
-    # hr = db_hr()
+    hr = db_hr()
     # # 慎重使用
     # s = "ALTER TABLE rec_ps ADD ps53 text"
     # hr.runsql(s)
-    
+
+    # rpt
+    s = "UPDATE rec_rpt SET rp07 = 0 WHERE rp01 = 12"
+    hr.runsql_rpt(s)
 
 def test1():
     # new id
@@ -119,5 +132,5 @@ def test1():
     qs = hr.cpGer_qs_lis(no)
     print(qs)
 if __name__ == '__main__':
-    test1()        
+    test2()        
     print('ok')
