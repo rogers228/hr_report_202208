@@ -1,4 +1,7 @@
-﻿import os, time
+﻿import sys
+sys.path.append(r'C:\python37_lib') #使用者模組資料夾路徑
+
+import os, time
 import tool_db_hr
 import PySimpleGUI as sg
 import rpt_sav07

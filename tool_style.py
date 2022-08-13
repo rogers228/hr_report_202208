@@ -14,7 +14,7 @@ if True: # border
     no_border = Border(
         left = none_border, 
         right = none_border, 
-        top = none_border, 
+        top = none_border,
         bottom = none_border,
     )
 

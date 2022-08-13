@@ -19,38 +19,6 @@ class File_tool():
         if not os.path.isdir(self.report_path): #建立資料夾
             os.mkdir(self.report_path)
 
-            # # 建立ini
-            # cf = configparser.ConfigParser()
-            # cf['report'] = {}
-            # with open(self.ini_path, 'w') as f:
-            #     cf.write(f)
-
-    # def ini_write(self, key, value): #寫入ini
-    #     cf = configparser.ConfigParser()
-    #     cf.read(self.ini_path)
-    #     cf.set('report', key, str(value))
-    #     with open(self.ini_path, 'w') as f:
-    #         cf.write(f)
-
-    # def ini_get(self, key): #寫入ini
-    #     result = ''
-    #     cf = configparser.ConfigParser()
-    #     cf.read(self.ini_path)
-    #     try:
-    #         result = cf['report'][key]
-    #     except:
-    #         pass
-    #     return result
-
-    # def clear(self, key): # 清除特定報表
-    #     # 製表sav07 前 清除上一個sav07
-    #     old_file = os.path.join(self.report_path, self.ini_get(key))
-    #     if os.path.exists(old_file): #若檔案存在則刪除
-    #         try:
-    #             os.remove(old_file)
-    #         except Exception as e:
-    #             print('Failed to delete %s. Reason: %s' % (old_file, e))
-
     def clear(self, key): # 清除特定報表
         for f in os.listdir(self.report_path):
             if os.path.isfile(os.path.join(self.report_path, f)): # 僅針對檔案
