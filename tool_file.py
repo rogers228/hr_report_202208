@@ -1,5 +1,4 @@
 import os
-# import configparser
 import config
 
 class File_tool():
@@ -8,9 +7,6 @@ class File_tool():
 
     def init_cs(self):
         # 初始化
-        # 在電腦文件夾建立資料夾及ini檔
-        # ini紀錄當下製表紀錄，作為下次製表時的清除依據
-
         self.report_dir = config.config_report_dir # 資料夾名稱
         self.report_path = os.path.join(os.path.expanduser(r'~\Documents'), self.report_dir) #資料夾路徑
         self.ini = 'report.ini' # ini檔案名稱
