@@ -9,9 +9,6 @@ class File_tool():
         # 初始化
         self.report_dir = config.config_report_dir # 資料夾名稱
         self.report_path = os.path.join(os.path.expanduser(r'~\Documents'), self.report_dir) #資料夾路徑
-        self.ini = 'report.ini' # ini檔案名稱
-        self.ini_path = os.path.join(self.report_path, self.ini) # ini路徑
-
         if not os.path.isdir(self.report_path): #建立資料夾
             os.mkdir(self.report_path)
 
