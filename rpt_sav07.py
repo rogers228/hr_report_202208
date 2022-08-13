@@ -10,21 +10,22 @@ from config import *
 class Report_sav07(tool_excel):
     def __init__(self, filename):
         self.fileName = filename
-        self.report_path = config_report_path.get(os.getenv('COMPUTERNAME'), None)
+        self.report_name = 'sav07'
+        self.report_dir = config_report_dir # 資料夾名稱
+        self.report_path = os.path.join(os.path.expanduser(r'~\Documents'), self.report_dir) #資料夾路徑
+
+        self.hr = tool_db_hr.db_hr() # 資料庫
+        self.file_tool = tool_file.File_tool() # 檔案工具並初始化資料夾
         if self.report_path is None:
             print('找不到路徑')
             raise SystemExit  #結束
-        self.clear_temp()    # 清除暫存
-        self.create_excel()  # 建立
 
-        self.hr = tool_db_hr.db_hr()
+        self.file_tool.clear(self.report_name) # 清除舊檔
+
+        self.create_excel()  # 建立
         self.output()
         self.save_xls()
         self.open_excel() #開啟
-
-    def clear_temp(self): # 清除暫存
-        ftl = tool_file.File_tool()
-        ftl.clear()
 
     def create_excel(self):
         wb = openpyxl.Workbook()
@@ -75,9 +76,6 @@ class Report_sav07(tool_excel):
 
         self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)
         self.c_merge(cr,1,cr,5)
-
-
-
 
 def test1():
     fileName = 'sav07' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'

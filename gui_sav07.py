@@ -28,9 +28,9 @@ class Gui_sav07():
             raise SystemExit  #正式結束程式 而不需要導入sys
 
     def gui(self):
-        layout = [  [sg.Text('Yeoshe HR\n\n')],
+        layout = [  [sg.Text(self.gui_name + '\n\n')],
                     [sg.Button('ok'), sg.Button('Cancel')] ]
-        w = sg.Window(self.gui_name, layout, 
+        w = sg.Window('Yeoshe HR', layout, 
                         size=(350, 120),
                         resizable=True)
         while True:
@@ -45,8 +45,6 @@ class Gui_sav07():
 
 def test1():
     win = Gui_sav07()
-
-
 
 if __name__ == '__main__':
     test1()
