@@ -1,3 +1,8 @@
+if True:
+    import sys, custom_path
+    config_path = custom_path.custom_path['hr_report_202208'] # 取得專案引用路徑
+    sys.path.append(config_path) # 載入專案路徑
+    
 import pandas as pd
 import pyodbc
 from config import *
