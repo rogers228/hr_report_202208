@@ -1,3 +1,6 @@
+import os, sys
+sys.path.append(os.path.dirname(__file__)) #加入資料夾路徑   使用絕對路徑  cmd執行才會正確
+
 import click
 import gui_sav07
 
@@ -13,5 +16,5 @@ def sav07():
     gui_sav07.Gui_sav07()
 
 if __name__ == '__main__':
-    # main('sav07') # debug
-    main()
+    main('sav07') # debug
+    # main()
