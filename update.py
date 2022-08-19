@@ -9,7 +9,7 @@ def main():
     args = {
         'purge': True,   # 同步清除
         'create' : True, # 資料夾不存在時則建立
-        'ignore' : ['\.git', '\.gitignore','old', 'test.*', 'update.py'] # 忽略
+        'ignore' : ['\.git', '\.gitignore', 'old', 'test.*', 'update.py'] # 忽略
     }
     dirsync.sync(config_develop_program, config_servr_program, 'sync', **args)
 
