@@ -34,7 +34,7 @@ class db_hr(): #讀取excel 單一零件
             logging.warning('error class db_ab().def runsql()! 無法執行SQL!')
 
     def get_database_ps(self):
-        s = "SELECT ps01,ps02,ps03,ps11,ps12,ps31,ps52 FROM rec_ps ORDER BY ps01"
+        s = "SELECT ps01,ps02,ps03,ps11,ps12,ps31,ps34,ps52 FROM rec_ps ORDER BY ps01"
         df = pd.read_sql(s, self.cn) #轉pd
         return df
 
@@ -57,6 +57,11 @@ class db_hr(): #讀取excel 單一零件
         ps = self.dbps
         df = ps.loc[ps['ps01'] == myid] # 篩選
         return df.iloc[0]['ps03'] if len(df.index) > 0 else ''
+
+    def idgetps34(self, myid): #人員ID取得是否需要刷卡ps34
+        ps = self.dbps
+        df = ps.loc[ps['ps01'] == myid] # 篩選
+        return df.iloc[0]['ps34'] if len(df.index) > 0 else 0
 
     def df_ps_atwork(self): #在職人員列表
         ps = self.dbps
@@ -91,6 +96,20 @@ class db_hr(): #讀取excel 單一零件
         s = s.format(qs01)
         df = pd.read_sql(s, self.rpt) #轉pd
         return df['qs02'].tolist() if len(df.index) > 0 else []
+
+    def ymGetrd_df(self, ym):
+        # rd02 工號
+        # ym 年月日6碼
+        s = """
+            SELECT rd02,rd03,rd06,rd07,rd08,rd10,rd11,rd12,rd19,
+                    rd21,rd22,rd23,rd24,rd25,rd26,rd27,rd28,rd29,rd30,rd31,rd34,rd35
+            FROM rec_rd
+            WHERE rd03 LIKE '{0}%'
+            ORDER BY rd03 ASC
+            """
+        s = s.format(ym)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
 
     def test(self):
         s = "SELECT TOP 5 * FROM rec_ps"
@@ -131,11 +150,12 @@ def test1():
     # qs = hr.cpGer_qs_lis(no)
     # print(no)
     # print(qs)
-
-    no = hr.pc02Getpc01('DESKTOP-0LGQBL4')
-    print(no)
-    qs = hr.cpGer_qs_lis(no)
-    print(qs)
+    # no = hr.pc02Getpc01('DESKTOP-0LGQBL4')
+    # print(no)
+    # qs = hr.cpGer_qs_lis(no)
+    # print(qs)
+    df = hr.ymGetrd_df('202207')
+    print(df)
 if __name__ == '__main__':
-    test2()        
+    test1()        
     print('ok')

@@ -15,10 +15,9 @@ from config import *
 class Report_sav07(tool_excel):
     def __init__(self, filename):
         self.fileName = filename
-        self.report_name = 'sav07'
+        self.report_name = 'sav07' # 職務代理人清冊
         self.report_dir = config_report_dir # 資料夾名稱
         self.report_path = os.path.join(os.path.expanduser(r'~\Documents'), self.report_dir) #資料夾路徑
-
         self.hr = tool_db_hr.db_hr() # 資料庫
         self.file_tool = tool_file.File_tool() # 檔案工具並初始化資料夾
         if self.report_path is None:
@@ -36,7 +35,7 @@ class Report_sav07(tool_excel):
         wb = openpyxl.Workbook()
         sh = wb.active
         # sh.title = self.report_name
-        sh.title = self.fileName.split('_')[0] # report_name
+        sh.title = self.report_name
         self.xlsfile = os.path.join(self.report_path, self.fileName)
         wb.save(filename = self.xlsfile)
         super().__init__(self.xlsfile, wb, sh) # 傳遞引數給父class
@@ -81,6 +80,8 @@ class Report_sav07(tool_excel):
 
         self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)
         self.c_merge(cr,1,cr,5)
+
+
 
 def test1():
     fileName = 'sav07' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'

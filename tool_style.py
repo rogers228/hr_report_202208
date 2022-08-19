@@ -14,6 +14,7 @@ if True: # border
                         bottom=Side(style='thin'))
 
     bottom_border = Border(bottom=Side(style='thin'))
+    bt_border = Border(top=Side(style='thin'), bottom=Side(style='thin'))
     bottom_border_sk = Border(bottom=Side(style='dotted'))
     none_border = Side(border_style=None)
     no_border = Border(
@@ -35,6 +36,7 @@ if True: # font
     font_9B = Font(size = "9", bold=True)
     font_9B_Gadugi = Font(size = "9", bold=True, name='Gadugi')
     font_10 = Font(size = "10")
+    font_A_10 = Font(name = "Arial" ,size = "10")
     font_10B = Font(size = "10", bold=True)
     font_11 = Font(size = "11")
     font_11B = Font(size = "11", bold=True)

@@ -23,8 +23,8 @@ class File_tool():
                 if f.find(key) == 0: # 該檔案是否為key開頭
                     try:
                         os.remove(os.path.join(self.report_path, f))
-                    except Exception as e:
-                        print('Failed to delete %s. Reason: %s' % (os.path.join(self.report_path, e), e))
+                    except:
+                        pass
 
 def test1():
     ftl = File_tool()
