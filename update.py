@@ -6,11 +6,12 @@ from config import *
 import dirsync
 
 def main():
-    # purge = True 同步清除
-    dirsync.sync(config_develop_program, 
-                config_servr_program, 
-                action='sync', 
-                purge = True)
+    args = {
+        'purge': True,   # 同步清除
+        'create' : True, # 資料夾不存在時則建立
+        'ignore' : ['\.git', '\.gitignore','old', 'test.*', 'update.py'] # 忽略
+    }
+    dirsync.sync(config_develop_program, config_servr_program, 'sync', **args)
 
     print('update is finished')
 
