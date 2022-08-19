@@ -26,9 +26,22 @@ def getWeekdayStr(year_s, month_s, day_s): #計算星期幾
     except:
         return ''
 
+def getNextymStr(ym): #下一個月的年月6碼
+    # ym 年月6碼
+    y = int(ym[:4])
+    m = int(ym[4:6])
+    if m < 12:
+        m += 1
+    else:
+        m =1
+        y += 1
+
+    return '{:0>4d}'.format(y) + '{:0>2d}'.format(m)
+
+
 def test1():
-    print(getYMdays('2022','02'))
-    print(getWeekdayStr('2022','08','18'))
+    print(getNextymStr('202201'))
+
 
 if __name__ == '__main__':
     test1()

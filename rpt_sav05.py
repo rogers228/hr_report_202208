@@ -122,10 +122,8 @@ class Report_sav05(tool_excel):
                 self.c_write(cr, d+2, rd11, font_A_10, alignment=ah_wr, border=bottom_border, fillcolor = color)
             cr += 1
 
-
-
-        # self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)
-        # self.c_merge(cr,1,cr,5)
+        self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)
+        self.c_merge(cr,1,cr, YM_Days+2)
 
 def test1():
     fileName = 'sav05' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'

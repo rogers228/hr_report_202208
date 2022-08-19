@@ -111,6 +111,47 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def ymGetrd_sum_df(self, ym1, ym2):
+        # ym 年月日6碼
+        s = """
+            SELECT rd02, ps02, ps03,
+                Sum(rd06) AS Srd06,
+                Sum(rd07) AS Srd07,
+                Sum(rd08) AS Srd08,
+                Sum(rd09) AS Srd09,
+                Sum(rd14) AS Srd14,
+                Sum(rd15) AS Srd15,
+                Sum(rd16) AS Srd16,
+                Sum(rd17) AS Srd17,
+                Sum(rd18) AS Srd18,
+                Sum(rd19) AS Srd19,
+                Sum(rd20) AS Srd20,
+                Sum(rd21) AS Srd21,
+                Sum(rd22) AS Srd22,
+                Sum(rd23) AS Srd23,
+                Sum(rd24) AS Srd24,
+                Sum(rd25) AS Srd25,
+                Sum(rd26) AS Srd26,
+                Sum(rd27) AS Srd27,
+                Sum(rd28) AS Srd28,
+                Sum(rd29) AS Srd29,
+                Sum(rd30) AS Srd30,
+                Sum(rd31) AS Srd31,
+                Sum(rd32) AS Srd32,
+                Sum(rd33) AS Srd33,
+                Sum(rd34) AS Srd34,
+                Sum(rd35) AS Srd35
+            FROM rec_rd LEFT JOIN rec_ps ON rec_rd.rd02 = rec_ps.ps01
+            WHERE
+                rd03 > '{0}' AND
+                rd03 < '{1}'
+            GROUP BY rd02,ps02,ps03
+            ORDER BY ps02 ASC
+            """
+        s = s.format(ym1, ym2)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def test(self):
         s = "SELECT TOP 5 * FROM rec_ps"
         # s= "SELECT ps01,ps02,ps03 FROM rec_ps"
@@ -146,16 +187,11 @@ def test2(): #添加欄位
 def test1():
     # new id
     hr = db_hr()
-    # no = hr.ps18Getps01('DESKTOP-CFANU1B')
-    # qs = hr.cpGer_qs_lis(no)
-    # print(no)
-    # print(qs)
-    # no = hr.pc02Getpc01('DESKTOP-0LGQBL4')
-    # print(no)
-    # qs = hr.cpGer_qs_lis(no)
-    # print(qs)
-    df = hr.ymGetrd_df('202207')
+    df = hr.ymGetrd_sum_df('202207','202209')
+    pd.set_option('display.max_rows', df.shape[0]+1) # 顯示最多列
+    pd.set_option('display.max_columns', None) #顯示最多欄位    
     print(df)
+    print(df.dtypes)
 if __name__ == '__main__':
     test1()        
     print('ok')

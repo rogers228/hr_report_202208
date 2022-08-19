@@ -37,6 +37,7 @@ if True: # font
     font_9B_Gadugi = Font(size = "9", bold=True, name='Gadugi')
     font_10 = Font(size = "10")
     font_A_10 = Font(name = "Arial" ,size = "10")
+    font_A_10G = Font(name = "Arial" ,size = "10", color='cccccc')
     font_10B = Font(size = "10", bold=True)
     font_11 = Font(size = "11")
     font_11B = Font(size = "11", bold=True)
