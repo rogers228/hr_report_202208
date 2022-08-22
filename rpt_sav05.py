@@ -43,7 +43,8 @@ class Report_sav05(tool_excel):
         self.xlsfile = os.path.join(self.report_path, self.fileName)
         wb.save(filename = self.xlsfile)
         super().__init__(self.xlsfile, wb, sh) # 傳遞引數給父class
-        self.set_page_layout() # 頁面設定layout
+        # self.set_page_layout() # 頁面設定layout
+        self.set_page_layout_horizontal()
 
     def open_excel(self):
         if os.path.exists(self.xlsfile): #檔案存在
@@ -69,8 +70,8 @@ class Report_sav05(tool_excel):
             self.c_write(3, d+2, d, font_A_10, border=bt_border)
             self.c_write(4, d+2, tool_func.getWeekdayStr(yStr, mStr, d), font_A_10, border=bottom_border)
 
-        lis_w = [8,9]
-        lis_wd = [7.5]*YM_Days
+        lis_w = [8,8]
+        lis_wd = [6.4]*YM_Days
         lis_w.extend(lis_wd)
         self.c_column_width(lis_w) # 設定欄寬
 
