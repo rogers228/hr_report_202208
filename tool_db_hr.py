@@ -126,6 +126,22 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def userGetrd_df(self, userno, year):
+        # userno 工號
+        # year 4碼
+        s = """
+            SELECT rd02,rd03,rd04,rd06,rd07,rd08,rd10,rd11,rd12,rd19,
+                    rd21,rd22,rd23,rd24,rd25,rd26,rd27,rd28,rd29,rd30,rd31,rd34,rd35
+            FROM rec_rd LEFT JOIN rec_ps ON rd02=ps01
+            WHERE
+                ps02 LIKE '{0}%' AND
+                rd03 LIKE '{1}%'
+            ORDER BY rd03 DESC
+            """
+        s = s.format(userno, year)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def ymGetrs_df(self, ym):
         # ym 年月日6碼
         s = """
@@ -235,14 +251,9 @@ def test1():
     # pd.set_option('display.max_rows', df.shape[0]+1) # 顯示最多列
     # pd.set_option('display.max_columns', None) #顯示最多欄位    
     # print(df)
-    df_sv = hr.ymGetrs_df('202207')
-    print(df_sv)
-    
-    lis_ca = list(set(df_sv['ps40'].tolist()))
-    lis_ca.sort()
-    print(lis_ca)
-    # lis_ca = list(set(df_sv['ps40'].tolist())).sort()
-    # print(lis_ca)
+    df_rd = hr.userGetrd_df('AA0031','2022')
+    print(df_rd)
+
 if __name__ == '__main__':
     test1()        
     print('ok')

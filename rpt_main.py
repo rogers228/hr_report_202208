@@ -6,24 +6,27 @@ if True:
 import os, time
 import click
 import tool_auth
-import rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav07, rpt_sav08
+import rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08
 
 @click.command() # 命令行入口
 @click.option('-report_name', help='report name', required=True, type=str) # required 必要的
+@click.option('-userno', help='user no Like AA0031', type=str)
+@click.option('-y1', help='year 4 char', type=str)
 @click.option('-ym', help='year and month 6 char', type=str)
 @click.option('-ym1', help='year and month 6 char', type=str)
 @click.option('-ym2', help='year and month 6 char', type=str)
 @click.option('-ymd', help='year, month, day 8 char', type=str)
 @click.option('-h1', help='hour 2 char', type=str)
 @click.option('-h2', help='hour 2 char', type=str)
-def main(report_name,
-        ym = '', ym1 = '', ym2 = '',
-        ymd = '',
-        h1 = '', h2 = ''):
+def main(report_name, userno='',
+        y1='', ym='', ym1='', ym2='', ymd='',
+        h1='', h2=''):
     au = tool_auth.Authorization()
     if not au.isqs(701): # 檢查 701 權限
         return # 無權限 退出
 
+    global usernoStr; usernoStr = userno
+    global y1Str;     y1Str = y1
     global ymStr;     ymStr = ym
     global ym1Str;    ym1Str = ym1
     global ym2Str;    ym2Str = ym2
@@ -34,6 +37,7 @@ def main(report_name,
     dic = {'sav03': sav03,
            'sav04': sav04,
            'sav05': sav05,
+           'sav06': sav06,
            'sav07': sav07,
            'sav08': sav08,
           }
@@ -50,6 +54,9 @@ def sav04(): # 薪資轉帳明細表
 
 def sav05(): # 出勤狀況表(月)
     rpt_sav05.Report_sav05(fileName, ymStr)
+
+def sav06(): # 出勤狀況表(個人年度)
+    rpt_sav06.Report_sav06(fileName, usernoStr, y1Str)
 
 def sav07(): # 職務代理人清冊
     rpt_sav07.Report_sav07(fileName)
