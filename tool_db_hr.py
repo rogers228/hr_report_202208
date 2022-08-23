@@ -101,6 +101,12 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.rpt) #轉pd
         return df.iloc[0]['pc01'] if len(df.index) > 0 else ''
 
+    def pa08Getpa02(self, pa08): #項目編號 查詢 項目名稱
+        s = "SELECT TOP 1 pa02 FROM rec_pa WHERE pa08 LIKE '{0}'"
+        s = s.format(pa08)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df.iloc[0]['pa02'] if len(df.index) > 0 else ''
+
     def ca01Getca03(self, ca01): #設備 電腦名稱 查詢 設備代號
         s = "SELECT TOP 1 ca03 FROM rec_ca WHERE ca01 = {0}"
         s = s.format(ca01)
@@ -112,6 +118,22 @@ class db_hr(): #讀取excel 單一零件
         s = s.format(qs01)
         df = pd.read_sql(s, self.rpt) #轉pd
         return df['qs02'].tolist() if len(df.index) > 0 else []
+
+    def wGetps_df(self, whereSTR=''):
+        # whereSTR: 不包含 WHERE的 where SQL語句
+        s = """
+            SELECT ps02,ps03,ps05,ps06,ps07,ps08,ps09,ps10,ps11,
+                    ps12,ps13,ps14,ps22,ps23,ps25,ps26,ps27,ps28,ps29,
+                    ps30,ps31,ps34,ps35,ps52,ps53,
+                    bn02
+            FROM rec_ps
+            LEFT JOIN rec_bn ON ps31=bn01
+            WHEREPLACESTR
+            ORDER BY ps02 ASC
+            """
+        s = s.replace('WHEREPLACESTR','' if whereSTR =='' else f'WHERE {whereSTR}')
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
 
     def ymGetrd_df(self, ym):
         # ym 年月日6碼
@@ -212,6 +234,22 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def wGerpf_df(self, whereSTR=''):
+        # 薪資項目明細
+        s = """
+            SELECT ps02,pa08,pa02,pf05
+            FROM rec_pf
+                LEFT JOIN rec_ps ON pf01=ps01
+                LEFT JOIN rec_pa ON pf02=pa01
+            WHERE
+                ps11 = 1
+            WHEREPLACESTR
+            ORDER BY pf02, ps02 ASC
+            """
+        s = s.replace('WHEREPLACESTR','' if whereSTR =='' else f' AND {whereSTR}')
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def test(self):
         s = "SELECT TOP 5 * FROM rec_ps"
         # s= "SELECT ps01,ps02,ps03 FROM rec_ps"
@@ -251,8 +289,11 @@ def test1():
     # pd.set_option('display.max_rows', df.shape[0]+1) # 顯示最多列
     # pd.set_option('display.max_columns', None) #顯示最多欄位    
     # print(df)
-    df_rd = hr.userGetrd_df('AA0031','2022')
-    print(df_rd)
+
+    print(hr.pa08Getpa02('A002'))
+    # whereSTR = "pa08 IN ('0010','0020','0030','0040','0050','0060','0070','0210','0220','A001')"
+    # df_rd = hr.wGerpf_df(whereSTR)
+    # print(df_rd)
 
 if __name__ == '__main__':
     test1()        

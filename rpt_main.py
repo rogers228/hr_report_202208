@@ -6,7 +6,7 @@ if True:
 import os, time
 import click
 import tool_auth
-import rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08
+import rpt_sav02, rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08, rpt_sav09
 
 @click.command() # 命令行入口
 @click.option('-report_name', help='report name', required=True, type=str) # required 必要的
@@ -18,9 +18,11 @@ import rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08
 @click.option('-ymd', help='year, month, day 8 char', type=str)
 @click.option('-h1', help='hour 2 char', type=str)
 @click.option('-h2', help='hour 2 char', type=str)
+@click.option('-where_str', help='SQL where String', type=str)
 def main(report_name, userno='',
         y1='', ym='', ym1='', ym2='', ymd='',
-        h1='', h2=''):
+        h1='', h2='',
+        where_str=''):
     au = tool_auth.Authorization()
     if not au.isqs(701): # 檢查 701 權限
         return # 無權限 退出
@@ -33,18 +35,24 @@ def main(report_name, userno='',
     global ymdStr;    ymdStr = ymd
     global h1Str;     h1Str = h1
     global h2Str;     h2Str = h2
+    global whereStr;  whereStr = where_str
     global fileName; fileName = report_name + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    dic = {'sav03': sav03,
+    dic = {'sav02': sav02,
+           'sav03': sav03,
            'sav04': sav04,
            'sav05': sav05,
            'sav06': sav06,
            'sav07': sav07,
            'sav08': sav08,
+           'sav09': sav09,
           }
 
     func = dic.get(report_name, None)
     if func is not None:
         func()
+
+def sav02(): # 薪資項目明細表
+    rpt_sav02.Report_sav02(fileName)
 
 def sav03(): # 出勤統計表
     rpt_sav03.Report_sav03(fileName, ym1Str, ym2Str)
@@ -63,6 +71,9 @@ def sav07(): # 職務代理人清冊
 
 def sav08(): # 出勤狀況表(當日)  看訂便當人數
     rpt_sav08.Report_sav08(fileName, ymdStr, h1Str, h2Str)
+
+def sav09(): # 人員基本資料
+    rpt_sav09.Report_sav09(fileName, whereStr)
 
 if __name__ == '__main__':
     # main('sav07') # debug
