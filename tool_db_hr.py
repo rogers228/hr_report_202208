@@ -34,7 +34,7 @@ class db_hr(): #讀取excel 單一零件
             logging.warning('error class db_ab().def runsql()! 無法執行SQL!')
 
     def get_database_ps(self):
-        s = "SELECT ps01,ps02,ps03,ps11,ps12,ps31,ps32,ps33,ps34,ps52 FROM rec_ps ORDER BY ps01"
+        s = "SELECT ps01,ps02,ps03,ps11,ps12,ps14,ps23,ps31,ps32,ps33,ps34,ps52 FROM rec_ps ORDER BY ps01"
         df = pd.read_sql(s, self.cn) #轉pd
         return df
 
@@ -57,6 +57,16 @@ class db_hr(): #讀取excel 單一零件
         ps = self.dbps
         df = ps.loc[ps['ps01'] == myid] # 篩選
         return df.iloc[0]['ps03'] if len(df.index) > 0 else ''
+
+    def idgetps14(self, myid): #人員ID取得 ps14通知Email
+        ps = self.dbps
+        df = ps.loc[ps['ps01'] == myid] # 篩選
+        return df.iloc[0]['ps14'] if len(df.index) > 0 else ''
+
+    def idgetps23(self, myid): #人員ID取得 ps23可特休天數
+        ps = self.dbps
+        df = ps.loc[ps['ps01'] == myid] # 篩選
+        return df.iloc[0]['ps23'] if len(df.index) > 0 else 0
 
     def idgetps32(self, myid): #人員ID取得 ps32訂餐
         ps = self.dbps
@@ -138,8 +148,8 @@ class db_hr(): #讀取excel 單一零件
     def ymGetrd_df(self, ym):
         # ym 年月日6碼
         s = """
-            SELECT rd02,rd03,rd06,rd07,rd08,rd10,rd11,rd12,rd19,
-                    rd21,rd22,rd23,rd24,rd25,rd26,rd27,rd28,rd29,rd30,rd31,rd34,rd35
+            SELECT rd02,rd03,rd04,rd06,rd07,rd08,rd10,rd11,rd12,rd14,rd15,rd16,rd17,rd18,rd19,
+                    rd21,rd22,rd23,rd24,rd25,rd26,rd27,rd28,rd29,rd30,rd31,rd33,rd34,rd35
             FROM rec_rd
             WHERE rd03 LIKE '{0}%'
             ORDER BY rd03 ASC
@@ -167,13 +177,28 @@ class db_hr(): #讀取excel 單一零件
     def ymGetrs_df(self, ym):
         # ym 年月日6碼
         s = """
-            SELECT ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
+            SELECT rs01,ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
             FROM rec_ps 
                 LEFT JOIN rec_rs ON ps01=rs02
             WHERE rs03 LIKE '{0}%'
             ORDER BY ps02 ASC
             """
         s = s.format(ym)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
+    def Getrv_in_df(self, inSTR=''):
+        # 薪資項目明細
+        s = """
+            SELECT rv01,rv02,rv03,rv04,rv05,rv06,rv07,
+                pa02,pa08
+            FROM rec_rv
+                LEFT JOIN rec_pa ON rv02=pa01
+            WHERE
+                rv01 in {0}
+            ORDER BY pa08 ASC
+            """
+        s = s.format(inSTR)
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
@@ -250,6 +275,24 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def Gersw_6_df(self, psid, year): # 人員年度特休以請天數
+        # psid : ps01
+        # year 4碼
+        s = """
+            SELECT SUM(sw06) AS TDays
+            FROM rec_sw
+                LEFT JOIN rec_sg ON rec_sw.sw01 = rec_sg.sg01
+            WHERE
+                sw02 = {0} AND
+                sw04 = 1 AND
+                (sg10 = 0 OR sg10 = 1) AND
+                LEN(sw05) = 6 AND
+                sw05 LIKE '{1}%'
+            """
+        s = s.format(psid, year)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df.iloc[0]['TDays'] if len(df.index) > 0 else 0
+
     def test(self):
         s = "SELECT TOP 5 * FROM rec_ps"
         # s= "SELECT ps01,ps02,ps03 FROM rec_ps"
@@ -290,10 +333,12 @@ def test1():
     # pd.set_option('display.max_columns', None) #顯示最多欄位    
     # print(df)
 
-    print(hr.pa08Getpa02('A002'))
+    # print(hr.Gersw_6_df(hr.nogetId('AA0094'), '2022'))
     # whereSTR = "pa08 IN ('0010','0020','0030','0040','0050','0060','0070','0210','0220','A001')"
     # df_rd = hr.wGerpf_df(whereSTR)
     # print(df_rd)
+    df = hr.userGetrd_df('AA0094','202207')
+    print(df)
 
 if __name__ == '__main__':
     test1()        

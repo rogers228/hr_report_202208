@@ -35,7 +35,7 @@ class Report_sav06(tool_excel):
         self.create_excel()  # 建立
         self.output()
         self.save_xls()
-        self.open_excel() #開啟
+        self.open_xls() # 開啟
 
     def create_excel(self):
         wb = openpyxl.Workbook()
@@ -47,13 +47,6 @@ class Report_sav06(tool_excel):
         super().__init__(self.xlsfile, wb, sh) # 傳遞引數給父class
         # self.set_page_layout() # 頁面設定layout
         self.set_page_layout_horizontal()
-
-    def open_excel(self):
-        if os.path.exists(self.xlsfile): #檔案存在
-            # 使用cmd 使用excel啟動 最大化 該檔案
-            cmd = r'start "" /max EXCEL.EXE "' + self.xlsfile + '"'
-            # print(cmd)
-            os.system(cmd)
 
     def output(self):
         caption = '出勤狀況表(個人年度)' # 標題

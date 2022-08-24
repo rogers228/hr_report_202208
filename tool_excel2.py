@@ -2,7 +2,8 @@ if True:
     import sys, custom_path
     config_path = custom_path.custom_path['hr_report_202208'] # 取得專案引用路徑
     sys.path.append(config_path) # 載入專案路徑
-    
+
+import os
 import openpyxl
 from openpyxl.utils import get_column_letter #轉換
 from tool_style import *
@@ -74,11 +75,21 @@ class tool_excel(): #讀取excel 單一零件
         for i in range(len(width_list)):
             self.sh.column_dimensions[get_column_letter(i+1)].width = width_list[i]
 
+    def c_row_height(self, row_index, row_height): # 設定列高
+        self.sh.row_dimensions[row_index].height = row_height 
+
     def save_xls(self): # 儲存
         try:
             self.workbook.save(self.file) #save
         except:
             print('儲存時發生錯誤，無法處理該檔案，有可能檔案已被開啟尚未關閉!')
+
+    def open_xls(self):
+        if os.path.exists(self.file): #檔案存在
+            # 使用cmd 使用excel啟動 最大化 該檔案
+            cmd = r'start "" /max EXCEL.EXE "' + self.file + '"'
+            # print(cmd)
+            os.system(cmd)
 
 def test1():
     print('test1')
