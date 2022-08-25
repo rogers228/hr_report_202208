@@ -86,7 +86,7 @@ class Report_sav09(tool_excel):
 
 def test1():
     fileName = 'sav09' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav09(fileName, '')
+    Report_sav09(fileName, 'ps11>=0')
     print('ok')
 
 if __name__ == '__main__':

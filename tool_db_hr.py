@@ -192,12 +192,15 @@ class db_hr(): #讀取excel 單一零件
         # userno_arr 使用者工號 AA0031,AA0094 文字陣列
 
         # 轉 userno_inSTR 使用者工號 "('AA0031','AA0094')"
+        # print('ym:',ym)
+        # print('userno_arr:', userno_arr)
         if userno_arr == "":
             userno_inSTR = ""
+            print('1')
         else:
-            userno_arr = userno_arr.replace(' ','') # 去除空格
+            userno_arr = str(userno_arr).replace(' ','') # 去除空格
             userno_inSTR = "('" + "','".join(userno_arr.split(',')) + "')"
-
+            print('2')
         s = """
             SELECT rs01,ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
             FROM rec_ps 
@@ -361,7 +364,7 @@ def test1():
     # whereSTR = "pa08 IN ('0010','0020','0030','0040','0050','0060','0070','0210','0220','A001')"
     # df_rd = hr.wGerpf_df(whereSTR)
     # print(df_rd)
-    df = hr.userGetrd_df('AA0094','202207')
+    df = hr.wuGetrs_df('202207','')
     print(df)
 
 if __name__ == '__main__':

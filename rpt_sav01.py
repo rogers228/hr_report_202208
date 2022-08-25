@@ -56,12 +56,12 @@ class Report_sav01(tool_excel):
         self.c_column_width([34,8,8,10,10,30]) # 設定欄寬
         if True: # data
             # 人員
-            # df_rs = self.hr.ymGetrs_df(self.YM) 
-            # df_rs = self.hr.wuGetrs_df(self.YM, "('AA0031','AA0094')") 
-            df_rs = self.hr.wuGetrs_df(self.YM, self.userno_arr) 
+            if self.userno_arr is None:
+                df_rs = self.hr.wuGetrs_df(self.YM, '') 
+            else:
+                df_rs = self.hr.wuGetrs_df(self.YM, self.userno_arr) 
             lis_ps = list(set(df_rs['ps02'].tolist())) #人員
             lis_ps.sort()
-
             # 薪資
             lis_rs = list(set(df_rs['rs01'].tolist())) 
             inStr = "(" + ",".join([str(e) for e in lis_rs]) + ")"
@@ -230,8 +230,9 @@ class Report_sav01(tool_excel):
 
 def test1():
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav01(fileName, '202207', 'AA0031, AA0094')
+    # Report_sav01(fileName, '202207', 'AA0031, AA0094')
     # Report_sav01(fileName, '202207')
+    Report_sav01(fileName, '202207', '')
     print('ok')
 
 if __name__ == '__main__':
