@@ -196,11 +196,9 @@ class db_hr(): #讀取excel 單一零件
         # print('userno_arr:', userno_arr)
         if userno_arr == "":
             userno_inSTR = ""
-            print('1')
         else:
             userno_arr = str(userno_arr).replace(' ','') # 去除空格
             userno_inSTR = "('" + "','".join(userno_arr.split(',')) + "')"
-            print('2')
         s = """
             SELECT rs01,ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
             FROM rec_ps 
@@ -319,27 +317,6 @@ class db_hr(): #讀取excel 單一零件
         s = s.format(psid, year)
         df = pd.read_sql(s, self.cn) #轉pd
         return df.iloc[0]['TDays'] if len(df.index) > 0 else 0
-
-    def test(self):
-        s = "SELECT TOP 5 * FROM rec_ps"
-        # s= "SELECT ps01,ps02,ps03 FROM rec_ps"
-        # s ="""SELECT rd01,rd02,rd03  FROM rec_rd
-        #     WHERE
-        #         rd02 = 32 AND
-        #         rd03 LIKE '202006%'
-        #     ORDER BY rd03"""
-
-        # s = """SELECT COUNT(*) FROM rec_sv
-        #     WHERE
-        #         sv02 = 219 AND
-        #         sv03 LIKE '202109%' AND
-        #         sv04 = 1
-        #         """
-        print(s)
-        df = pd.read_sql(s, self.cn) #轉pd
-        pd.set_option('display.max_rows', df.shape[0]+1) # 顯示最多列
-        pd.set_option('display.max_columns', None) #顯示最多欄位
-        print(df)
 
 def test2(): #添加欄位
     pass

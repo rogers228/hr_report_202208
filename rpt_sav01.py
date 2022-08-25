@@ -128,37 +128,43 @@ class Report_sav01(tool_excel):
                 # page2
                 cr = ((ps_i+1)*page1_rows) + (ps_i*page1_rows) + 1
                 # 遮罩 mask
-                m_str = '''▒▊▉▄■▊▄▉▄■▊▒▀▀■▀▒▒▊▒▒▄▊▀▒▄▒■▀▉▀▒▀▉▀▄■▉▉▀▀▊■■▀▒■▒▊▉▒▄▀▀▒▉▒▄▉■▊▀▄■▀▊▊▀▒▒▀▄■▄▒▊▄
-                            ▄▉▒▀▒▄▀▊▄▄▀▊▊■▒▀▄▉▉▄▉▒▀▄▊■▊▉▀▒▒▊▊▄▉▄▉▀▒▒▒▊▒▒▊▉▄▄▊▒▄▉▊▄■▒▀▄▄■▀▒▄▉■▄▀▊▀▒▒▀▄■▄▒▊▄▀▄▀▄▒▊▊
+                m_str = '''▒▊▒▉▄■▊▒▄▉▒▄■▊▒▀▀■▀▒▒▊▒▒▄▊▀▒▄▒■▀▉▀▒▀▉▀▒▒▄■▉▒▉▀▒▀▊■■▀▒■▒▊▒▉▒▄▀▀▒▉▒▄▉▒■▊▀▒▄■▀▊▒▊▀▒▒▀▄■▄▒▊▒▄▒▒▊▒
+                            ▄▉▒▀▒▄▀▊▄▄▀▊▒▊■▒▀▄▉▒▉▄▉▒▀▄▊■▊▒▉▀▒▒▊▊▒▄▉▄▉▀▒▒▒▊▒▒▊▒▉▄▄▊▒▄▉▒▊▄■▒▀▄▄■▀▒▄▉■▒▄▀▊▀▒▒▀▄■▄▒▊▄▀▄▀▄▒▊
                             '''
                 m_str = m_str.replace(' ','')
                 m_random = [10,5,15,9,8,14,6,0,13,2,7,3,1,4,11,12];  m_lenght = 70
-                for i in range(12):
+                for i in range(16):
                     mask = m_str[m_random[i]:m_random[i]+m_lenght]
                     if i == 0:
                         mv = f'{mask}   {ps_i+1}' # 人碼
                     elif i == 3:
-                        mv = f'{mask}{psno}{name_s}■▊▒▀' # 收件人
+                        mv = f'{mask}{psno}{name_s}▒▄▊敬啟■▊▒▀' # 收件人
                     else:
                         mv = mask
                     self.c_write(cr+i, 6, mv, font_A_10, alignment=ah_right)
+                cr_b = cr+51 # 頁尾
+                for i in range(4):
+                    mask = m_str[m_random[i]:m_random[i]+m_lenght]
+                    self.c_write(cr_b+i, 6, mask, font_A_10, alignment=ah_right)
 
-                df_wrd = df_rd.loc[(df_rd['rd02'] == psid)] #人員 出勤            
+                #打卡出勤紀錄
+                df_wrd = df_rd.loc[(df_rd['rd02'] == psid)] 
                 if len(df_wrd.index) > 0:
-                    cr+=12; self.c_write(cr, 1, f'日期年月: {self.YM}', font_A_10)
-                    cr+=1 ; self.c_write(cr, 1, '日期                刷卡時間', font_A_10, border=bt_border); self.c_merge(cr,1,cr,4)
-                    self.c_write(cr, 5, '出勤狀況', font_A_10, border=bt_border); self.c_merge(cr,5,cr,6)
+                    cr+=16; self.c_write(cr, 1, f'日期年月: {self.YM}', font_A_8)
+                    cr+=1 ; self.c_write(cr, 1, '日期                  刷卡時間', font_A_8, border=bt_border); self.c_merge(cr,1,cr,4)
+                    self.c_write(cr, 5, '出勤狀況', font_A_8, border=bt_border); self.c_merge(cr,5,cr,6)
                     for rdi, r in df_wrd.iterrows():
                         cr+=1
                         dic_r = self.rd2value_dic(r)
-                        self.c_write(cr, 1, self.format_date(dic_r), font_A_10, border=bk); self.c_merge(cr,1,cr,4)
-                        self.c_write(cr, 5, self.format_state(dic_r), font_A_10, border=bk); self.c_merge(cr,5,cr,6)
+                        # self.c_row_height(cr, 12)
+                        self.c_write(cr, 1, self.format_date(dic_r), font_A_8, border=bk); self.c_merge(cr,1,cr,4)
+                        self.c_write(cr, 5, self.format_state(dic_r), font_A_8, border=bk); self.c_merge(cr,5,cr,6)
+                    cr+=1; self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top, border=top_border); self.c_merge(cr,1,cr,6)
+
                 else:
-                    cr+=12; self.c_write(cr, 1, '無刷卡紀錄', font_A_10, border=bk)
+                    cr+=16; self.c_write(cr, 1, '無打卡紀錄', font_A_8)
 
-
-                cr+=1; self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top, border=top_border); self.c_merge(cr,1,cr,6)
-
+                
             cr += ((ps_i+1)*page2_rows)-cr # change user
 
     def rd2value_dic(self, pandas_row):
@@ -230,9 +236,9 @@ class Report_sav01(tool_excel):
 
 def test1():
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    # Report_sav01(fileName, '202207', 'AA0031, AA0094')
+    Report_sav01(fileName, '202207', 'AA0002, AA0031, AA0094')
+    # Report_sav01(fileName, '202207', 'AA0031')
     # Report_sav01(fileName, '202207')
-    Report_sav01(fileName, '202207', '')
     print('ok')
 
 if __name__ == '__main__':

@@ -33,6 +33,7 @@ if True: # font
     # ...                 strike=False,
     # ...                 color='FF000000')
     font_8 = Font(size = "8")
+    font_A_8 = Font(name = "Arial" ,size = "8")
     font_9 = Font(size = "9")
     font_9B = Font(size = "9", bold=True)
     font_9B_Gadugi = Font(size = "9", bold=True, name='Gadugi')
