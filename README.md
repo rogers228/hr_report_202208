@@ -4,7 +4,7 @@
 2. 靈活度度高，不受限單獨的資料來源限制，排版布局自由度高
 3. 使用者接受度高, excel大家都會使用
 4. 部屬python免安裝環境在工作站本機執行
-5. 需額外製建立更新程式
+5. 需額外製建立[更新程式](https://github.com/rogers228/python_client_update/tree/main)
 
 ## 報表
 
