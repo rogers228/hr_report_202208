@@ -14,12 +14,13 @@ import tool_func
 from config import *
 
 class Report_sav01(tool_excel):
-    def __init__(self, filename,YM, whereSTR):
+    def __init__(self, filename, YM, userno_arr= ""):
         # YM 查詢年月6碼  起
-        # whereSTR 自訂範圍
+        # userno_arr 使用者工號 AA0031,AA0094 文字陣列
+        # userno_inSTR 使用者工號 "('AA0031','AA0094')"
         self.fileName = filename
         self.YM = YM
-        self.whereSTR = whereSTR
+        self.userno_arr = userno_arr
         self.report_name = 'sav01' # 薪資單
         self.report_dir = config_report_dir # 資料夾名稱
         self.report_path = os.path.join(os.path.expanduser(r'~\Documents'), self.report_dir) #資料夾路徑
@@ -55,7 +56,9 @@ class Report_sav01(tool_excel):
         self.c_column_width([34,8,8,10,10,30]) # 設定欄寬
         if True: # data
             # 人員
-            df_rs = self.hr.ymGetrs_df(self.YM) 
+            # df_rs = self.hr.ymGetrs_df(self.YM) 
+            # df_rs = self.hr.wuGetrs_df(self.YM, "('AA0031','AA0094')") 
+            df_rs = self.hr.wuGetrs_df(self.YM, self.userno_arr) 
             lis_ps = list(set(df_rs['ps02'].tolist())) #人員
             lis_ps.sort()
 
@@ -107,7 +110,6 @@ class Report_sav01(tool_excel):
                 cr+=1; self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top, border=top_border); self.c_merge(cr,1,cr,6)
 
                 # 特休資訊
-                
                 mdays = self.hr.idgetps23(psid) # 人員可特休天數
                 tdays = self.hr.Gersw_6_df(psid, self.YM[:4]) # 人員年度特休以請天數
                 if tdays is None:
@@ -122,15 +124,26 @@ class Report_sav01(tool_excel):
                 if self.hr.idgetps14(psid) == '': 
                     mailMemo = '***您尚未設定Email !! 請設定以免遺漏重要訊息。'
                     cr+=1; self.c_write(cr, 1, mailMemo, font_A_10, alignment=ah_left_center); self.c_merge(cr,1,cr,6)
-                
-                
 
                 # page2
                 cr = ((ps_i+1)*page1_rows) + (ps_i*page1_rows) + 1
-                self.c_write(cr, 1, '----遮罩----', font_A_10)
-                self.c_write(cr, 6, ps_i+1, font_A_10, alignment=ah_right) # 人碼
-                df_wrd = df_rd.loc[(df_rd['rd02'] == psid)] #人員 出勤
-                
+                # 遮罩 mask
+                m_str = '''▒▊▉▄■▊▄▉▄■▊▒▀▀■▀▒▒▊▒▒▄▊▀▒▄▒■▀▉▀▒▀▉▀▄■▉▉▀▀▊■■▀▒■▒▊▉▒▄▀▀▒▉▒▄▉■▊▀▄■▀▊▊▀▒▒▀▄■▄▒▊▄
+                            ▄▉▒▀▒▄▀▊▄▄▀▊▊■▒▀▄▉▉▄▉▒▀▄▊■▊▉▀▒▒▊▊▄▉▄▉▀▒▒▒▊▒▒▊▉▄▄▊▒▄▉▊▄■▒▀▄▄■▀▒▄▉■▄▀▊▀▒▒▀▄■▄▒▊▄▀▄▀▄▒▊▊
+                            '''
+                m_str = m_str.replace(' ','')
+                m_random = [10,5,15,9,8,14,6,0,13,2,7,3,1,4,11,12];  m_lenght = 70
+                for i in range(12):
+                    mask = m_str[m_random[i]:m_random[i]+m_lenght]
+                    if i == 0:
+                        mv = f'{mask}   {ps_i+1}' # 人碼
+                    elif i == 3:
+                        mv = f'{mask}{psno}{name_s}■▊▒▀' # 收件人
+                    else:
+                        mv = mask
+                    self.c_write(cr+i, 6, mv, font_A_10, alignment=ah_right)
+
+                df_wrd = df_rd.loc[(df_rd['rd02'] == psid)] #人員 出勤            
                 if len(df_wrd.index) > 0:
                     cr+=12; self.c_write(cr, 1, f'日期年月: {self.YM}', font_A_10)
                     cr+=1 ; self.c_write(cr, 1, '日期                刷卡時間', font_A_10, border=bt_border); self.c_merge(cr,1,cr,4)
@@ -168,7 +181,6 @@ class Report_sav01(tool_excel):
             if key in list(dic_v.keys()):
                 if dic_v[key] == 1: # 移除 正常 1天
                     del dic_v[key]
-
         return dic_v
 
     def format_date(self, dic):
@@ -218,7 +230,8 @@ class Report_sav01(tool_excel):
 
 def test1():
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav01(fileName, '202207', '')
+    Report_sav01(fileName, '202207', 'AA0031, AA0094')
+    # Report_sav01(fileName, '202207')
     print('ok')
 
 if __name__ == '__main__':

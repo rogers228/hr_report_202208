@@ -6,7 +6,7 @@ if True:
 import os, time
 import click
 import tool_auth
-import rpt_sav02, rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08, rpt_sav09
+import rpt_sav01, rpt_sav02, rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08, rpt_sav09
 
 @click.command() # 命令行入口
 @click.option('-report_name', help='report name', required=True, type=str) # required 必要的
@@ -37,7 +37,8 @@ def main(report_name, userno='',
     global h2Str;     h2Str = h2
     global whereStr;  whereStr = where_str
     global fileName; fileName = report_name + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    dic = {'sav02': sav02,
+    dic = {'sav01': sav01,
+           'sav02': sav02,
            'sav03': sav03,
            'sav04': sav04,
            'sav05': sav05,
@@ -50,6 +51,9 @@ def main(report_name, userno='',
     func = dic.get(report_name, None)
     if func is not None:
         func()
+
+def sav01(): # 薪資單
+    rpt_sav01.Report_sav01(fileName, ymStr, usernoStr)
 
 def sav02(): # 薪資項目明細表
     rpt_sav02.Report_sav02(fileName)

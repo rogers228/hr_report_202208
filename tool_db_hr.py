@@ -187,6 +187,30 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def wuGetrs_df(self, ym, userno_arr=''):
+        # ym 年月日6碼
+        # userno_arr 使用者工號 AA0031,AA0094 文字陣列
+
+        # 轉 userno_inSTR 使用者工號 "('AA0031','AA0094')"
+        if userno_arr == "":
+            userno_inSTR = ""
+        else:
+            userno_arr = userno_arr.replace(' ','') # 去除空格
+            userno_inSTR = "('" + "','".join(userno_arr.split(',')) + "')"
+
+        s = """
+            SELECT rs01,ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
+            FROM rec_ps 
+                LEFT JOIN rec_rs ON ps01=rs02
+            WHERE rs03 LIKE '{0}%'
+            WHEREPLACESTR
+            ORDER BY ps02 ASC
+            """
+        s = s.format(ym)
+        s = s.replace('WHEREPLACESTR','' if userno_inSTR =='' else f' AND ps02 IN {userno_inSTR}')
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def Getrv_in_df(self, inSTR=''):
         # 薪資項目明細
         s = """

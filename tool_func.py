@@ -35,12 +35,10 @@ def getNextymStr(ym): #下一個月的年月6碼
     else:
         m =1
         y += 1
-
     return '{:0>4d}'.format(y) + '{:0>2d}'.format(m)
 
-
 def test1():
-    print(getNextymStr('202201'))
+    print(getNextymStr('202212'))
 
 
 if __name__ == '__main__':
