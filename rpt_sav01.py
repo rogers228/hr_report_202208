@@ -50,9 +50,7 @@ class Report_sav01(tool_excel):
 
     def output(self):
         caption = '薪資單' # 標題
-        if True: # seyle
-            bk = bottom_border_sk
-
+        a10 = font_A_10; a8 = font_A_8; bk = bottom_border_sk # seyle
         self.c_column_width([34,8,8,10,10,30]) # 設定欄寬
         if True: # data
             # 人員
@@ -66,46 +64,43 @@ class Report_sav01(tool_excel):
             lis_rs = list(set(df_rs['rs01'].tolist())) 
             inStr = "(" + ",".join([str(e) for e in lis_rs]) + ")"
             df_rv = self.hr.Getrv_in_df(inStr) #薪資項目
-
             # 出勤
             df_rd = self.hr.ymGetrd_df(self.YM)
 
         cr = 0; page1_rows = 55; page2_rows = 110
         for ps_i, psno in enumerate(lis_ps):
             psid = self.hr.nogetId(psno)
+            ln = list(self.hr.nogetName(psno)); name_s = f'{ln[0]}**{ln[-1]}' # 姓名遮罩
 
             # page1
-            cr+=1; self.c_write(cr, 1, caption, font_A_10) #標題
-            self.c_write(cr, 6, ps_i+1, font_A_10, alignment=ah_right) # 人碼
-            cr+=1; self.c_write(cr, 1, f'計薪年月: {self.YM}', font_A_10)
-            ln = list(self.hr.nogetName(psno)); name_s = f'{ln[0]}**{ln[-1]}'
-            cr+=1; self.c_write(cr, 1, f'人員: {psno} {name_s}', font_A_10)
+            cr+=1; self.c_write(cr, 1, caption, a10) #標題
+            self.c_write(cr, 6, ps_i+1, a10, alignment=ah_right) # 人碼
+            cr+=1; self.c_write(cr, 1, f'計薪年月: {self.YM}', a10)
+            cr+=1; self.c_write(cr, 1, f'人員: {psno} {name_s}', a10)
 
             df_w = df_rs.loc[(df_rs['ps02'] == psno)] #人員
             for i, r in df_w.iterrows():
-                cr+=1; self.c_write(cr, 1, '實領薪資總額: ' + '{:,.0f}'.format(r['rs08']), font_A_10)
-                cr+=1; self.c_write(cr, 1, '轉帳金額(一): ' + '{:,.0f}'.format(r['rs10']), font_A_10)
-                cr+=1; self.c_write(cr, 1, '轉帳金額(二): ' + '{:,.0f}'.format(r['rs11']), font_A_10)
-                cr+=1; self.c_write(cr, 1, '轉帳金額(三): ' + '{:,.0f}'.format(r['rs12']), font_A_10)
-
+                cr+=1; self.c_write(cr, 1, f"實領薪資總額: {r['rs08']:,.0f}", a10)
+                cr+=1; self.c_write(cr, 1, f"轉帳金額(一): {r['rs10']:,.0f}", a10)
+                cr+=1; self.c_write(cr, 1, f"轉帳金額(二): {r['rs11']:,.0f}", a10)
+                cr+=1; self.c_write(cr, 1, f"轉帳金額(三): {r['rs12']:,.0f}", a10)
                 cr+=1; lis_column = ['薪資項目','數量','單位','單價','金額','備註']
                 for j, col in enumerate(lis_column):
                     ah2 = ah_right if j in [1,3,4] else ah_left
-                    self.c_write(cr, j+1, col, font_A_10, alignment=ah2, border=bt_border)
+                    self.c_write(cr, j+1, col, a10, alignment=ah2, border=bt_border)
 
                 df_wrv = df_rv.loc[(df_rv['rv01'] == r['rs01'])] #薪資項目
                 for j, v in df_wrv.iterrows():
-                    cr+=1; 
-                    self.c_write(cr, 1, f"{v['pa08']} {v['pa02']}", font_A_10, border=bk)
-                    self.c_write(cr, 2, v['rv04'], font_A_10, alignment=ah_right, border=bk)
-                    self.c_write(cr, 3, v['rv03'], font_A_10, border=bk)
-                    self.c_write(cr, 4, v['rv05'], font_A_10, alignment=ah_right, border=bk)
-                    self.c_write(cr, 5, v['rv06'], font_A_10, alignment=ah_right, border=bk)
+                    cr+=1; self.c_write(cr, 1, f"{v['pa08']} {v['pa02']}", a10, border=bk)
+                    self.c_write(cr, 2, v['rv04'], a10, alignment=ah_right, border=bk)
+                    self.c_write(cr, 3, v['rv03'], a10, border=bk)
+                    self.c_write(cr, 4, v['rv05'], a10, alignment=ah_right, border=bk)
+                    self.c_write(cr, 5, v['rv06'], a10, alignment=ah_right, border=bk)
                     if len(v['rv07']) > 16: #備註過長
-                        self.c_write(cr, 6, '', font_A_10, border=bk)
-                        cr+=1; self.c_write(cr, 1, '*' + v['rv07'], font_A_10, border=bk); self.c_merge(cr,1,cr,6) # 換行
+                        self.c_write(cr, 6, '', a10, border=bk)
+                        cr+=1; self.c_write(cr, 1, '*' + v['rv07'], a10, border=bk); self.c_merge(cr,1,cr,6) # 換行
                     else:
-                        self.c_write(cr, 6, v['rv07'], font_A_10, border=bk) #備註
+                        self.c_write(cr, 6, v['rv07'], a10, border=bk) #備註
 
                 cr+=1; self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top, border=top_border); self.c_merge(cr,1,cr,6)
 
@@ -114,66 +109,54 @@ class Report_sav01(tool_excel):
                 tdays = self.hr.Gersw_6_df(psid, self.YM[:4]) # 人員年度特休以請天數
                 if tdays is None:
                     tdays = 0
-                holidayStr ='{}年度特休假：可休 {:.1f} 天，已請 {:.1f} 天，剩餘 {:.1f} 天。'.format(
-                    self.YM[:4], mdays, tdays, float(mdays) -float(tdays))
+                holidayStr =f'{self.YM[:4]}年度特休假：可休 {mdays:.1f} 天，已請 {tdays:.1f} 天，剩餘 {float(mdays) -float(tdays):.1f} 天。'
 
-                cr+=2; self.c_write(cr, 1, holidayStr, font_A_10, alignment=ah_left_center, border=thin_border); self.c_merge(cr,1,cr,6)
+                cr+=2; self.c_write(cr, 1, holidayStr, a10, alignment=ah_left_center, border=thin_border); self.c_merge(cr,1,cr,6)
                 self.c_row_height(cr, 28)
 
                 # Email
                 if self.hr.idgetps14(psid) == '': 
                     mailMemo = '***您尚未設定Email !! 請設定以免遺漏重要訊息。'
-                    cr+=1; self.c_write(cr, 1, mailMemo, font_A_10, alignment=ah_left_center); self.c_merge(cr,1,cr,6)
+                    cr+=1; self.c_write(cr, 1, mailMemo, a10, alignment=ah_left_center); self.c_merge(cr,1,cr,6)
 
                 # page2
                 cr = ((ps_i+1)*page1_rows) + (ps_i*page1_rows) + 1
-                # 遮罩 mask
-                m_str = '''▒▊▒▉▄■▊▒▄▉▒▄■▊▒▀▀■▀▒▒▊▒▒▄▊▀▒▄▒■▀▉▀▒▀▉▀▒▒▄■▉▒▉▀▒▀▊■■▀▒■▒▊▒▉▒▄▀▀▒▉▒▄▉▒■▊▀▒▄■▀▊▒▊▀▒▒▀▄■▄▒▊▒▄▒▒▊▒
-                            ▄▉▒▀▒▄▀▊▄▄▀▊▒▊■▒▀▄▉▒▉▄▉▒▀▄▊■▊▒▉▀▒▒▊▊▒▄▉▄▉▀▒▒▒▊▒▒▊▒▉▄▄▊▒▄▉▒▊▄■▒▀▄▄■▀▒▄▉■▒▄▀▊▀▒▒▀▄■▄▒▊▄▀▄▀▄▒▊
-                            '''
-                m_str = m_str.replace(' ','')
-                m_random = [10,5,15,9,8,14,6,0,13,2,7,3,1,4,11,12];  m_lenght = 70
+                # 遮罩 mask 頁首
                 for i in range(16):
-                    mask = m_str[m_random[i]:m_random[i]+m_lenght]
-                    if i == 0:
-                        mv = f'{mask}   {ps_i+1}' # 人碼
-                    elif i == 3:
-                        mv = f'{mask}{psno}{name_s}▒▄▊敬啟■▊▒▀' # 收件人
-                    else:
-                        mv = mask
-                    self.c_write(cr+i, 6, mv, font_A_10, alignment=ah_right)
+                    mask = tool_func.getMask(i)
+                    dic_case = {
+                        0: f'{mask}   {ps_i+1}', # 人碼
+                        3: f'{mask}{psno}{name_s}▒▄▊敬啟■▊▒▀'} # 收件人
+                    self.c_write(cr+i, 6, dic_case.get(i, mask), a10, alignment=ah_right)
+
                 cr_b = cr+51 # 頁尾
                 for i in range(4):
-                    mask = m_str[m_random[i]:m_random[i]+m_lenght]
-                    self.c_write(cr_b+i, 6, mask, font_A_10, alignment=ah_right)
+                    mask = tool_func.getMask(i)
+                    self.c_write(cr_b+i, 6, mask, a10, alignment=ah_right)
 
                 #打卡出勤紀錄
                 df_wrd = df_rd.loc[(df_rd['rd02'] == psid)] 
                 if len(df_wrd.index) > 0:
-                    cr+=16; self.c_write(cr, 1, f'日期年月: {self.YM}', font_A_8)
-                    cr+=1 ; self.c_write(cr, 1, '日期                  刷卡時間', font_A_8, border=bt_border); self.c_merge(cr,1,cr,4)
-                    self.c_write(cr, 5, '出勤狀況', font_A_8, border=bt_border); self.c_merge(cr,5,cr,6)
+                    cr+=16; self.c_write(cr, 1, f'日期年月: {self.YM}', a8)
+                    cr+=1 ; self.c_write(cr, 1, '日期                  刷卡時間', a8, border=bt_border); self.c_merge(cr,1,cr,4)
+                    self.c_write(cr, 5, '出勤狀況', a8, border=bt_border); self.c_merge(cr,5,cr,6)
                     for rdi, r in df_wrd.iterrows():
-                        cr+=1
                         dic_r = self.rd2value_dic(r)
-                        # self.c_row_height(cr, 12)
-                        self.c_write(cr, 1, self.format_date(dic_r), font_A_8, border=bk); self.c_merge(cr,1,cr,4)
-                        self.c_write(cr, 5, self.format_state(dic_r), font_A_8, border=bk); self.c_merge(cr,5,cr,6)
+                        cr+=1; self.c_write(cr, 1, self.format_date(dic_r), a8, border=bk); self.c_merge(cr,1,cr,4)
+                        self.c_write(cr, 5, self.format_state(dic_r), a8, border=bk); self.c_merge(cr,5,cr,6)
                     cr+=1; self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top, border=top_border); self.c_merge(cr,1,cr,6)
-
                 else:
-                    cr+=16; self.c_write(cr, 1, '無打卡紀錄', font_A_8)
+                    cr+=16; self.c_write(cr, 1, '無打卡紀錄', a8)
 
-                
             cr += ((ps_i+1)*page2_rows)-cr # change user
 
     def rd2value_dic(self, pandas_row):
         # pandas row to dic
         dic = pandas_row.to_dict()
-        dic_v = {}
-        for key in dic:
-            if dic[key] != 0:
-                dic_v[key] = dic[key]
+
+        lis_key = list(filter(lambda e: dic[e]!= 0, list(dic.keys()))) # 篩選出不為0的key
+        lis_value = [dic[e] for e in lis_key]
+        dic_v = dict(zip(lis_key, lis_value)) # 重新建構
 
         if dic_v['rd10'] == '': # 移除 無加班
             del dic_v['rd10']
@@ -183,6 +166,7 @@ class Report_sav01(tool_excel):
             'rd06': '實際出勤(天)',
             'rd14': '公休天數',
             'rd15': '周休天數'}
+
         for key in dic_remove:
             if key in list(dic_v.keys()):
                 if dic_v[key] == 1: # 移除 正常 1天
@@ -190,16 +174,14 @@ class Report_sav01(tool_excel):
         return dic_v
 
     def format_date(self, dic):
+        # 日   星期  類型  打卡
+        # 20   三  出勤日  0721,1215,1733
         dic_rd04 = {0:'未設定', 1:'出勤日', 2:'公休日', 3:'周休日', 4:'國定假日', 5:'無薪公休日', 6:'不計'}
-        result = '{0}   {1}  {2}  {3}'.format(
-            dic['rd03'][6:8],
-            tool_func.getWeekdayStr(dic['rd03'][0:4], dic['rd03'][4:6], dic['rd03'][6:8]),
-            dic_rd04[dic.get('rd04', 0)],
-            dic['rd11']
-            )
-        return result
+        d = dic['rd03']
+        return f"{d[6:8]}   {tool_func.getWeekdayStr(d[0:4], d[4:6], d[6:8])}  {dic_rd04[dic.get('rd04', 0)]}  {dic['rd11']}"
 
     def format_state(self, dic):
+        # 欲顯示的項目
         dic_rd = {
         'rd06': '出', # 實際出勤(天)
         'rd07': '缺', # 實際缺勤(天)
@@ -225,21 +207,17 @@ class Report_sav01(tool_excel):
         'rd34': '防疫照顧假', # 防疫照顧假
         'rd35': '疫苗接種假' # 疫苗接種假
         }
-        t = ''
-        for key in dic_rd:
-            if key in dic:
-                t += '{0}{1}, '.format(
-                    dic_rd[key], dic[key])
-        t = t.rstrip(' ')
-        t = t.rstrip(',')
-        return t
+
+        lis = list(filter(lambda e: e in list(dic_rd.keys()), list(dic.keys()))) # 有出現在欲顯示項目中的項目
+        return ' '.join([f'{dic_rd[e]}{dic[e]}' for e in lis])
 
 def test1():
+    timer1 = time.perf_counter()
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav01(fileName, '202207', 'AA0031, AA0094')
+    # Report_sav01(fileName, '202207', 'AA0031, AA0094')
     # Report_sav01(fileName, '202207', 'AA0031')
-    # Report_sav01(fileName, '202207')
-    print('ok')
+    Report_sav01(fileName, '202207')
+    print('運算時間:',time.perf_counter()-timer1)
 
 if __name__ == '__main__':
     test1()
