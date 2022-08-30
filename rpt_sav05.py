@@ -67,16 +67,15 @@ class Report_sav05(tool_excel):
         lis_wd = [6.4]*YM_Days
         lis_w.extend(lis_wd)
         self.c_column_width(lis_w) # 設定欄寬
-
+        df_ps = self.hr.ps_atwork_df() # 在職人員
         df_rd = self.hr.ymGetrd_df(self.YM) # 出勤資料
-        lis_ps = list(set(df_rd['rd02'].tolist())) # 人員唯一直
         cr = 5
-        for rd02 in lis_ps:
-            self.c_write(cr, 1, self.hr.idgetNo(rd02),   font_A_10, border=bottom_border) # 工號
-            self.c_write(cr, 2, self.hr.idgetName(rd02), font_A_10, border=bottom_border) # 姓名
+        for i, r in df_ps.iterrows():
+            self.c_write(cr, 1, r['ps02'], font_A_10, border=bottom_border) # 工號
+            self.c_write(cr, 2, r['ps03'], font_A_10, border=bottom_border) # 姓名
             for d in range(1, YM_Days + 1):
                 ymd14 = '{0}{1}000000'.format(self.YM, '{:0>2d}'.format(d))
-                df_w = df_rd.loc[(df_rd['rd02'] == rd02) & (df_rd['rd03'] == ymd14)] # 篩選
+                df_w = df_rd.loc[(df_rd['rd02'] == r['ps01']) & (df_rd['rd03'] == ymd14)] # 篩選
                 if len(df_w.index) > 0:
                     rs = df_w.iloc[0]
                     lis_rd11 = rs['rd11'].split(',')

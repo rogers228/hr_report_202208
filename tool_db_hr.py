@@ -83,10 +83,9 @@ class db_hr(): #讀取excel 單一零件
         df = ps.loc[ps['ps01'] == myid] # 篩選
         return df.iloc[0]['ps34'] if len(df.index) > 0 else 0
 
-    def df_ps_atwork(self): #在職人員列表
-        ps = self.dbps
-        df = ps.loc[ps['ps11'] == 1] # 篩選
-        df = df.fillna('') # 填充NaN為空白
+    def ps_atwork_df(self): #在職人員列表
+        s = "SELECT ps01,ps02,ps03 FROM rec_ps WHERE ps11 = 1 ORDER BY ps02"
+        df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
     def ps02Getdku_lis(self, ps02): #代理誰職務，等同 職務代理人的反查
@@ -128,6 +127,11 @@ class db_hr(): #讀取excel 單一零件
         s = s.format(qs01)
         df = pd.read_sql(s, self.rpt) #轉pd
         return df['qs02'].tolist() if len(df.index) > 0 else []
+
+    def Getps_inwork_lis(self): #所有在職人員
+        ps = self.dbps
+        df = ps.loc[ps['ps11'] == 1] # 篩選 在職
+        return df['ps02'].tolist() if len(df.index) > 0 else []
 
     def wGetps_df(self, whereSTR=''):
         # whereSTR: 不包含 WHERE的 where SQL語句
@@ -342,7 +346,8 @@ def test1():
     # whereSTR = "pa08 IN ('0010','0020','0030','0040','0050','0060','0070','0210','0220','A001')"
     # df_rd = hr.wGerpf_df(whereSTR)
     # print(df_rd)
-    df = hr.wuGetrs_df('202207','')
+    # df = hr.wuGetrs_df('202207','')
+    df = hr.ps_atwork_df()
     print(df)
 
 if __name__ == '__main__':

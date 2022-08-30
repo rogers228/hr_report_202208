@@ -19,7 +19,7 @@ class Report_sav03(tool_excel):
         # YM1 查詢年月6碼  迄
         self.fileName = filename
         self.YM1 = YM1; self.YM2 = YM2
-        self.report_name = 'sav03' # 出勤狀況表(月)
+        self.report_name = 'sav03' # 出勤統計表
         self.report_dir = config_report_dir # 資料夾名稱
         self.report_path = os.path.join(os.path.expanduser(r'~\Documents'), self.report_dir) #資料夾路徑
 

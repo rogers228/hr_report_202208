@@ -54,44 +54,40 @@ class Report_sav08(tool_excel):
         self.c_write(2, 1, f'年月日: {self.YMD}', font_A_10)
         self.c_write(3, 1, f'查詢時間: {self.H1}~{self.H2}', font_A_10)
 
-
         lis_col = ['編號','姓名','刷卡時間','訂餐','訂餐備註']
         for i, c in enumerate(lis_col):
             self.c_write(5, i+1, c, font_A_10, border=bt_border)
-
         lis_w = [16,10,20,6,20]
         self.c_column_width(lis_w) # 設定欄寬
 
         ymdh1 = f'{self.YMD}{self.H1}'
         ymdh2 = f'{self.YMD}{self.H2}'
-
+        df_ps = self.hr.ps_atwork_df() # 在職人員
         df_sv = self.hr.ymdGersv_df(ymdh1, ymdh2) # 刷卡資料
-        lis_ps = list(set(df_sv['ps02'].tolist())) # 人員唯一直
-        lis_ps.sort()
-
         font = {'black':font_A_10, 'gray': font_A_10G} # 顏色
         sum_d = 0 # 訂餐數量
-        print(sum_d)
         cr = 6
-        for ps02 in lis_ps:
+        for i, r in df_ps.iterrows():
+            ps01 = r['ps01']; ps02 = r['ps02']
             self.c_write(cr, 1, ps02,   font_A_10, border=bottom_border) # 工號
-            psid = self.hr.nogetId(ps02)
-            self.c_write(cr, 2, self.hr.idgetName(psid), font_A_10, border=bottom_border) # 姓名
-            # self.c_write(cr, 4, self.hr.idgetps32(psid), font_A_10, border=bottom_border) # 訂餐
-            v = self.hr.idgetps32(psid); f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 4, v, f2, border=bottom_border) # 訂餐
-            try:
-                int(v) # 檢查可否為數字  方加總
-                sum_d += v
-            except:
-                pass
-            self.c_write(cr, 5, self.hr.idgetps33(psid), font_A_10, border=bottom_border) # 訂餐備註
+            self.c_write(cr, 2, self.hr.idgetName(ps01), font_A_10, border=bottom_border) # 姓名
+            self.c_write(cr, 5, self.hr.idgetps33(ps01), font_A_10, border=bottom_border) # 訂餐備註
 
             df_w = df_sv.loc[(df_sv['ps02'] == ps02)] # 篩選 (以人為群組，可能有多筆刷卡資料)
             lis_sv = list(map(lambda e: e[8:12], df_w['sv03'].tolist())) # 刷卡資料(取時分4碼)
             if len(df_w.index) > 0:
                 self.c_write(cr, 3, ','.join(lis_sv), font_A_10, border=bottom_border) # 刷卡
+                v = self.hr.idgetps32(ps01) # 訂餐數量
             else:
                 self.c_write(cr, 3, '', font_A_10, border=bottom_border) # 刷卡
+                v = 0 # 沒來則不訂餐
+
+            f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 4, v, f2, border=bottom_border) # 訂餐
+            try:
+                int(v) # 檢查可否為數字  方加總
+                sum_d += v
+            except:
+                pass
             cr += 1
 
         self.c_write(4, 1, f'訂餐數量: {int(sum_d)}', font_A_10)
