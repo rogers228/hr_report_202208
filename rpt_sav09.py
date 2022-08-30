@@ -50,11 +50,11 @@ class Report_sav09(tool_excel):
         caption = '人員基本資料' # 標題
         self.c_write(1, 1, caption, font_A_10) #標題
         dic_ps11 ={0:'無', 1:'就職', 2:'離職', 3:'留職'}
-        self.c_column_width([8,12,6,12,6,9,9,28,
-            6,6,8,8,9,20,20,12,12,20]) # 設定欄寬
+        self.c_column_width([8,10,4,12,6,9,9,28,
+            6,6,8,8,9,20,20,12,12,20,5]) # 設定欄寬
         lis_title = ['人員編號','姓名','性別','身份證號','任職狀態','就職日期','離職日期',
         '通知Email','特休假天數','可特休天數','職稱','職等','生日','聯絡地址','戶籍地址','聯絡電話一','聯絡電話二',
-        '班別']
+        '班別','公司']
         for i, title in enumerate(lis_title):
             self.c_write(2, i+1, title, font_A_10, alignment = ah_wr, border=bt_border, fillcolor=cf_gray) #標題
 
@@ -80,6 +80,7 @@ class Report_sav09(tool_excel):
             ci+=1; self.c_write(cr, ci, r['ps29'], font_A_10, alignment = ah_wr, border=bottom_border) # 聯絡電話一
             ci+=1; self.c_write(cr, ci, r['ps30'], font_A_10, alignment = ah_wr, border=bottom_border) # 聯絡電話二
             ci+=1; self.c_write(cr, ci, r['bn02'], font_A_10, alignment = ah_wr, border=bottom_border) # 班別
+            ci+=1; self.c_write(cr, ci, r['ca02'], font_A_10, alignment = ah_wr, border=bottom_border) # 公司
             cr += 1; ci = 0
         # self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)
         # self.c_merge(cr,1,cr, YM_Days+2)

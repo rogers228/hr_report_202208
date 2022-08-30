@@ -135,9 +135,10 @@ class db_hr(): #讀取excel 單一零件
             SELECT ps02,ps03,ps05,ps06,ps07,ps08,ps09,ps10,ps11,
                     ps12,ps13,ps14,ps22,ps23,ps25,ps26,ps27,ps28,ps29,
                     ps30,ps31,ps34,ps35,ps52,ps53,
-                    bn02
+                    bn02,ca02
             FROM rec_ps
-            LEFT JOIN rec_bn ON ps31=bn01
+                LEFT JOIN rec_bn ON ps31=bn01
+                LEFT JOIN rec_ca ON ps40=ca01
             WHEREPLACESTR
             ORDER BY ps02 ASC
             """
