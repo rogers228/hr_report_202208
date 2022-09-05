@@ -323,6 +323,16 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df.iloc[0]['TDays'] if len(df.index) > 0 else 0
 
+    def wGerpa_df(self, whereSTR=''):
+        # 基本薪資項目明細
+        s = """
+            SELECT pa01,pa02,pa03,pa04,pa05,pa06,pa07,pa08,pa09
+            FROM rec_pa
+            ORDER BY pa08 ASC
+            """
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
 def test2(): #添加欄位
     pass
     hr = db_hr()
@@ -347,7 +357,7 @@ def test1():
     # df_rd = hr.wGerpf_df(whereSTR)
     # print(df_rd)
     # df = hr.wuGetrs_df('202207','')
-    df = hr.ps_atwork_df()
+    df = hr.wGerpa_df()
     print(df)
 
 if __name__ == '__main__':
