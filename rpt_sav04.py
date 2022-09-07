@@ -67,10 +67,10 @@ class Report_sav04(tool_excel):
             for i, r in df_w.iterrows():
                 self.c_write(cr, 1, r['ps02'], font_A_10, border=bottom_border)
                 self.c_write(cr, 2, r['ps03'], font_A_10, border=bottom_border)
-                v = r['rs08']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 3, v, f2, border=bottom_border)
-                v = r['rs10']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 4, v, f2, border=bottom_border)
-                v = r['rs11']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 5, v, f2, border=bottom_border)
-                v = r['rs12']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 6, v, f2, border=bottom_border)
+                v = r['rs10']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 3, v, f2, border=bottom_border)
+                v = r['rs11']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 4, v, f2, border=bottom_border)
+                v = r['rs12']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 5, v, f2, border=bottom_border)
+                v = r['rs08']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 6, v, f2, border=bottom_border)
                 cr += 1
 
             self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)

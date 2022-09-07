@@ -216,7 +216,7 @@ def test1():
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
     # Report_sav01(fileName, '202207', 'AA0031, AA0094')
     # Report_sav01(fileName, '202207', 'AA0031')
-    Report_sav01(fileName, '202207')
+    Report_sav01(fileName, '202208')
     print('運算時間:',time.perf_counter()-timer1)
 
 if __name__ == '__main__':
