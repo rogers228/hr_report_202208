@@ -1,10 +1,9 @@
 if True:
     import sys, custom_path
     config_path = custom_path.custom_path['hr_report_202208'] # 取得專案引用路徑
-    sys.path.append(config_path) # 載入專案路徑
+    sys.path.append(config_path)
 
 import os, time
-
 import openpyxl
 from tool_excel2 import tool_excel
 from tool_style import *
@@ -51,6 +50,8 @@ class Report_sav01(tool_excel):
     def output(self):
         caption = '薪資單' # 標題
         a10 = font_A_10; a8 = font_A_8; bk = bottom_border_sk # seyle
+        
+
         self.c_column_width([34,8,8,10,10,30]) # 設定欄寬
         if True: # data
             # 人員
@@ -129,24 +130,32 @@ class Report_sav01(tool_excel):
                         10: f'——      {psno} {name_s}   敬啟  ——'} # 收件人
                     self.c_write(cr+i, 6, dic_case.get(i, mask), a10, alignment=ah_right)
 
+                self.c_image(cr+1, 6, os.path.join(config_path,'image','acg4.jpg'),20,85, 0.1,2.95) # 裝訂符號
+                self.c_image(cr, 4, os.path.join(config_path,'image','acg3.jpg'),20,199, 0.1,0) # 折線3
+                self.c_image(cr+12, 1, os.path.join(config_path,'image','acg2.jpg'),362,19, 0.1,2.8) # 折線2
+
                 cr_b = cr+51 # 頁尾
                 for i in range(4):
                     mask = tool_func.getMask(i)
                     self.c_write(cr_b+i, 6, mask, a10, alignment=ah_right)
 
                 #打卡出勤紀錄
-                df_wrd = df_rd.loc[(df_rd['rd02'] == psid)] 
+                df_wrd = df_rd.loc[(df_rd['rd02'] == psid)]
+                df_wrd.reset_index(inplace=True) #重置索引
+                # print(df_wrd)
                 if len(df_wrd.index) > 0:
-                    cr+=16; self.c_write(cr, 1, f'日期年月: {self.YM}', a8)
+                    cr+=14; self.c_write(cr, 1, f'日期年月: {self.YM}', a8)
                     cr+=1 ; self.c_write(cr, 1, '日期                  刷卡時間', a8, border=bt_border); self.c_merge(cr,1,cr,4)
                     self.c_write(cr, 5, '出勤狀況', a8, border=bt_border); self.c_merge(cr,5,cr,6)
                     for rdi, r in df_wrd.iterrows():
                         dic_r = self.rd2value_dic(r)
                         cr+=1; self.c_write(cr, 1, self.format_date(dic_r), a8, border=bk); self.c_merge(cr,1,cr,4)
                         self.c_write(cr, 5, self.format_state(dic_r), a8, border=bk); self.c_merge(cr,5,cr,6)
+                        if rdi == 10:
+                            cr +=1; self.c_image(cr, 1, os.path.join(config_path,'image','acg1.jpg'),362,19, 0.1,2.8) # 折線1 位置實際列印調整
                     cr+=1; self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top, border=top_border); self.c_merge(cr,1,cr,6)
                 else:
-                    cr+=16; self.c_write(cr, 1, '無打卡紀錄', a8)
+                    cr+=14; self.c_write(cr, 1, '無打卡紀錄', a8)
 
             cr += ((ps_i+1)*page2_rows)-cr # change user
 
@@ -214,8 +223,8 @@ class Report_sav01(tool_excel):
 def test1():
     timer1 = time.perf_counter()
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    # Report_sav01(fileName, '202207', 'AA0031, AA0094')
-    Report_sav01(fileName, '202208', 'AA0031')
+    Report_sav01(fileName, '202208', 'AA0031, AA0094')
+    # Report_sav01(fileName, '202208', 'AA0031')
     # Report_sav01(fileName, '202208')
     print('運算時間:',time.perf_counter()-timer1)
 
