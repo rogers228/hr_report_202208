@@ -122,11 +122,11 @@ class Report_sav01(tool_excel):
                 # page2
                 cr = ((ps_i+1)*page1_rows) + (ps_i*page1_rows) + 1
                 # 遮罩 mask 頁首
-                for i in range(16):
+                for i in range(11):
                     mask = tool_func.getMask(i)
                     dic_case = {
-                        0: f'{mask}   {ps_i+1}', # 人碼
-                        3: f'{mask}{psno}{name_s}▒▄▊敬啟■▊▒▀'} # 收件人
+                        0: f'{mask}—   {ps_i+1}', # 人碼
+                        10: f'——      {psno} {name_s}   敬啟  ——'} # 收件人
                     self.c_write(cr+i, 6, dic_case.get(i, mask), a10, alignment=ah_right)
 
                 cr_b = cr+51 # 頁尾
@@ -215,8 +215,8 @@ def test1():
     timer1 = time.perf_counter()
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
     # Report_sav01(fileName, '202207', 'AA0031, AA0094')
-    # Report_sav01(fileName, '202207', 'AA0031')
-    Report_sav01(fileName, '202208')
+    Report_sav01(fileName, '202208', 'AA0031')
+    # Report_sav01(fileName, '202208')
     print('運算時間:',time.perf_counter()-timer1)
 
 if __name__ == '__main__':
