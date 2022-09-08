@@ -150,6 +150,11 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def Getca_df(self):
+        s = "SELECT ca01,ca02,ca03,ca04 FROM rec_ca ORDER BY ca02 ASC"
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def ymGetrd_df(self, ym):
         # ym 年月日6碼
         s = """
@@ -357,7 +362,7 @@ def test1():
     # df_rd = hr.wGerpf_df(whereSTR)
     # print(df_rd)
     # df = hr.wuGetrs_df('202207','')
-    df = hr.wGerpa_df()
+    df = hr.Getca_df()
     print(df)
 
 if __name__ == '__main__':
