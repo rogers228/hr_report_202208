@@ -63,7 +63,7 @@ class Report_sav04(tool_excel):
             self.set_page_layout() # 頁面設定layout
 
             caption = '薪資轉帳明細表' # 標題
-            lis_w =[10,14,16,16,16,16]
+            lis_w =[16,16,16,16,16,16]
             self.c_column_width(lis_w) # 設定欄寬
 
             # lis_ca = list(set(df_rs['ps40'].tolist()))

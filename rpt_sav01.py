@@ -223,8 +223,8 @@ class Report_sav01(tool_excel):
 def test1():
     timer1 = time.perf_counter()
     fileName = 'sav01' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav01(fileName, '202208', 'AA0031, AA0094')
-    # Report_sav01(fileName, '202208', 'AA0031')
+    # Report_sav01(fileName, '202208', 'AA0031, AA0094')
+    Report_sav01(fileName, '202208', 'AA0031')
     # Report_sav01(fileName, '202208')
     print('運算時間:',time.perf_counter()-timer1)
 
