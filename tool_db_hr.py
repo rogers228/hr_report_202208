@@ -84,7 +84,7 @@ class db_hr(): #讀取excel 單一零件
         return df.iloc[0]['ps34'] if len(df.index) > 0 else 0
 
     def ps_atwork_df(self): #在職人員列表
-        s = "SELECT ps01,ps02,ps03 FROM rec_ps WHERE ps11 = 1 ORDER BY ps02"
+        s = "SELECT ps01,ps02,ps03,ps12,ps52 FROM rec_ps WHERE ps11 = 1 ORDER BY ps02"
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 

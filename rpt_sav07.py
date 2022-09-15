@@ -50,20 +50,22 @@ class Report_sav07(tool_excel):
         for i, title in enumerate(lis_title):
             self.c_write(2, i+1, title, font_9, fillcolor=cf_gray) #標題
 
-        df = self.hr.df_ps_atwork() # 在職人員
+        df = self.hr.ps_atwork_df() # 在職人員
         cr = 3
         for idx, r in df.iterrows():
             self.c_write(cr, 1, f"{r['ps02']} {r['ps03']}", border=bottom_border) # 人員
 
-            tmp = '\n'.join([f"{no} {self.hr.nogetName(no)}" for no in r['ps12'].split(',')])
-            self.c_write(cr, 2, tmp, alignment=ah_wr, border=bottom_border) # 職務代理人
+            if r['ps12'] is not None:
+                tmp = '\n'.join([f"{no} {self.hr.nogetName(no)}" for no in r['ps12'].split(',')])
+                self.c_write(cr, 2, tmp, alignment=ah_wr, border=bottom_border) # 職務代理人
 
             lis_dku = self.hr.ps02Getdku_lis(r['ps02'])
             tmp = '\n'.join([f"{no} {self.hr.nogetName(no)}" for no in lis_dku])
             self.c_write(cr, 3, tmp, alignment=ah_wr, border=bottom_border) # 代理誰職務
 
-            tmp = '\n'.join([f"{no} {self.hr.nogetName(no)}" for no in r['ps52'].split(',')]) 
-            self.c_write(cr, 4, tmp, alignment=ah_wr, border=bottom_border) # 請假通知人
+            if r['ps52'] is not None:
+                tmp = '\n'.join([f"{no} {self.hr.nogetName(no)}" for no in r['ps52'].split(',')]) 
+                self.c_write(cr, 4, tmp, alignment=ah_wr, border=bottom_border) # 請假通知人
 
             lis_dbt = self.hr.ps02Getdbt_lis(r['ps02'])
             tmp = '\n'.join([f"{no} {self.hr.nogetName(no)}" for no in lis_dku])
