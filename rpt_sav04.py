@@ -50,8 +50,6 @@ class Report_sav04(tool_excel):
 
         self.xlsfile = os.path.join(self.report_path, self.fileName)
         wb.save(filename = self.xlsfile)
-        # super().__init__(self.xlsfile, wb, sh) # 傳遞引數給父class
-        # self.set_page_layout() # 頁面設定layout
 
     def output(self):
         wb = self.wb
