@@ -25,6 +25,7 @@ def main(report_name, userno='',
         where_str=''):
     au = tool_auth.Authorization()
     if not au.isqs(701): # 檢查 701 權限
+        click.echo('無權限!')
         return # 無權限 退出
 
     global usernoStr; usernoStr = userno
