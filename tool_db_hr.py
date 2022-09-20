@@ -4,17 +4,17 @@ if True:
     sys.path.append(config_path) # 載入專案路徑
     
 import pandas as pd
-# import pyodbc
+import pyodbc
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine
 from config import *
 
 class db_hr(): #讀取excel 單一零件
     def __init__(self):
-        # self.cn = pyodbc.connect(config_conn_HR) # connect str 連接字串
-        # self.rpt = pyodbc.connect(config_conn_RPT) # connect str 連接字串
-        self.cn = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_HR})).connect()
-        self.rpt = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_RPT})).connect()
+        self.cn = pyodbc.connect(config_conn_HR) # connect str 連接字串
+        self.rpt = pyodbc.connect(config_conn_RPT) # connect str 連接字串
+        # self.cn = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_HR})).connect()
+        # self.rpt = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_RPT})).connect()
         self.dbps = self.get_database_ps() # 建議一次性基本資料檔，避免多次存取db
 
     def runsql(self, SQL):
@@ -25,7 +25,7 @@ class db_hr(): #讀取excel 單一零件
             cur.close() #關閉
         except:
             print(SQL)
-            logging.warning('error class db_ab().def runsql()! 無法執行SQL!')
+            print('error class db_ab().def runsql()! 無法執行SQL!')
 
     def runsql_rpt(self, SQL):
         try:
@@ -35,10 +35,10 @@ class db_hr(): #讀取excel 單一零件
             cur.close() #關閉
         except:
             print(SQL)
-            logging.warning('error class db_ab().def runsql()! 無法執行SQL!')
+            print('error class db_ab().def runsql()! 無法執行SQL!')
 
     def get_database_ps(self):
-        s = "SELECT ps01,ps02,ps03,ps11,ps12,ps14,ps23,ps31,ps32,ps33,ps34,ps52 FROM rec_ps ORDER BY ps01"
+        s = "SELECT ps01,ps02,ps03,ps11,ps12,ps14,ps23,ps31,ps32,ps33,ps34,ps52,ps56,ps57 FROM rec_ps ORDER BY ps01"
         df = pd.read_sql(s, self.cn) #轉pd
         return df
 
@@ -86,6 +86,16 @@ class db_hr(): #讀取excel 單一零件
         ps = self.dbps
         df = ps.loc[ps['ps01'] == myid] # 篩選
         return df.iloc[0]['ps34'] if len(df.index) > 0 else 0
+
+    def idgetps56(self, myid): #人員ID取得月提繳工資ps56
+        ps = self.dbps
+        df = ps.loc[ps['ps01'] == myid] # 篩選
+        return df.iloc[0]['ps56'] if len(df.index) > 0 else 0
+
+    def idgetps57(self, myid): #人員ID取得雇主提繳金額ps57
+        ps = self.dbps
+        df = ps.loc[ps['ps01'] == myid] # 篩選
+        return df.iloc[0]['ps57'] if len(df.index) > 0 else 0
 
     def ps_atwork_df(self): #在職人員列表
         s = "SELECT ps01,ps02,ps03,ps12,ps52 FROM rec_ps WHERE ps11 = 1 ORDER BY ps02"
@@ -342,16 +352,22 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def test1(self):
+        # 薪資項目明細
+        s = "SELECT TOP 1 * FROM rec_ps"
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
 def test2(): #添加欄位
     pass
-    hr = db_hr()
+    # hr = db_hr()
     # # 慎重使用
-    # s = "ALTER TABLE rec_ps ADD ps53 text"
+    # s = "ALTER TABLE rec_ps ADD ps56 decimal(12,3), ps57 decimal(12,3)"
     # hr.runsql(s)
 
-    # rpt
-    s = "UPDATE rec_rpt SET rp07 = 0 WHERE rp01 = 12"
-    hr.runsql_rpt(s)
+    # s = "UPDATE rec_ps SET rp056 = 0, rp057 = 0 WHERE rp01 = 12"
+    # s = "UPDATE rec_ps SET ps55 = ''"
+    # hr.runsql(s)
 
 def test1():
     # new id
@@ -366,7 +382,7 @@ def test1():
     # df_rd = hr.wGerpf_df(whereSTR)
     # print(df_rd)
     # df = hr.wuGetrs_df('202207','')
-    df = hr.Getca_df()
+    df = hr.test1()
     print(df)
 
 if __name__ == '__main__':
