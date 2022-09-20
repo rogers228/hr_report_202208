@@ -4,17 +4,17 @@ if True:
     sys.path.append(config_path) # 載入專案路徑
     
 import pandas as pd
-import pyodbc
+# import pyodbc
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine
 from config import *
 
 class db_hr(): #讀取excel 單一零件
     def __init__(self):
-        self.cn = pyodbc.connect(config_conn_HR) # connect str 連接字串
-        self.rpt = pyodbc.connect(config_conn_RPT) # connect str 連接字串
-        # self.cn = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_HR})).connect()
-        # self.rpt = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_RPT})).connect()
+        # self.cn = pyodbc.connect(config_conn_HR) # connect str 連接字串
+        # self.rpt = pyodbc.connect(config_conn_RPT) # connect str 連接字串
+        self.cn = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_HR})).connect()
+        self.rpt = create_engine(URL.create('mssql+pyodbc', query={'odbc_connect': config_conn_RPT})).connect()
         self.dbps = self.get_database_ps() # 建議一次性基本資料檔，避免多次存取db
 
     def runsql(self, SQL):
