@@ -86,7 +86,7 @@ class Report_sav01(tool_excel):
             # page1
             cr+=1; write(cr, 1, caption, a10) #標題
             write(cr, 6, ps_i+1, a10, alignment=ahr) # 人碼
-            cr+=1; write(cr, 1, f'計薪年月: {self.YM}', a10)
+            cr+=1; write(cr, 1, f'薪資: {self.YM[:4]}年 {self.YM[4:6]}月', a10)
             cr+=1; write(cr, 1, f'人員: {psno} {name_s}', a10)
 
             df_w = df_rs.loc[(df_rs['ps02'] == psno)] #人員
