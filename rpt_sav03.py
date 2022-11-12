@@ -54,19 +54,19 @@ class Report_sav03(tool_excel):
 
         df = self.hr.ymGetrd_sum_df(self.YM1, tool_func.getNextymStr(self.YM2)) # 出勤統計
         
-        fname = ['人員',      '姓名',    '出勤(天)','缺勤(天)','遲到(分鐘)',
-                 '加班(小時)','0~2加班', '2以上',   '公休',    '周休',
-                 '國定假日',  '無薪公休','不計天數','特休',    '公假',
-                 '婚假',      '喪假',    '產假',    '病假',    '事假',
-                 '陪產假',    '產檢假',  '育嬰假',  '留職停薪','實際遲到(分鐘)',
-                 '補刷卡次數','防疫照顧假','疫苗接種假'
+        fname = ['人員',      '姓名',    '出勤(天)',   '缺勤(天)','遲到(分鐘)',
+                 '加班(小時)','0~2加班', '2以上',      '公休',    '周休',
+                 '國定假日',  '無薪公休','不計天數',    '特休',    '公假',
+                 '婚假',      '喪假',    '產假',       '病假',    '事假',
+                 '陪產假',    '產檢假',  '育嬰假',     '留職停薪', '實際遲到(分鐘)',
+                 '補刷卡次數','防疫照顧假','疫苗接種假','返鄉探親假'
                  ]
         fsWidth =[8,10,6,6,6,
                   6,6,6,6,6,
                   6,6,6,6,6,
                   6,6,6,6,6,
                   6,6,6,6,6,
-                  6,6,6
+                  6,6,6,6
                   ] #欄寬
         self.c_column_width(fsWidth) # 設定欄寬
 
@@ -104,6 +104,7 @@ class Report_sav03(tool_excel):
             v = r['Srd33']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 26, v, f2, alignment = ah_right, border=bottom_border)
             v = r['Srd34']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 27, v, f2, alignment = ah_right, border=bottom_border)
             v = r['Srd35']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 28, v, f2, alignment = ah_right, border=bottom_border)
+            v = r['Srd36']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 29, v, f2, alignment = ah_right, border=bottom_border)
             cr += 1
 
         self.c_write(cr, 1, '-結束- 以下空白', alignment=ah_center_top)
@@ -111,7 +112,7 @@ class Report_sav03(tool_excel):
 
 def test1():
     fileName = 'sav03' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav03(fileName, '202208', '202208')
+    Report_sav03(fileName, '202211', '202211')
     print('ok')
 
 if __name__ == '__main__':

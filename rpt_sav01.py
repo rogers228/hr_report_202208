@@ -230,7 +230,8 @@ class Report_sav01(tool_excel):
         'rd31': '留職停薪', # 留職停薪天數
         'rd33': '補刷卡次數', # 補刷卡次數
         'rd34': '防疫照顧假', # 防疫照顧假
-        'rd35': '疫苗接種假' # 疫苗接種假
+        'rd35': '疫苗接種假', # 疫苗接種假
+        'rd36': '返鄉探親假' # 返鄉探親假
         }
 
         lis = list(filter(lambda e: e in list(dic_rd.keys()), list(dic.keys()))) # 有出現在欲顯示項目中的項目

@@ -280,7 +280,8 @@ class db_hr(): #讀取excel 單一零件
                 Sum(rd32) AS Srd32,
                 Sum(rd33) AS Srd33,
                 Sum(rd34) AS Srd34,
-                Sum(rd35) AS Srd35
+                Sum(rd35) AS Srd35,
+                Sum(rd36) AS Srd36
             FROM rec_rd LEFT JOIN rec_ps ON rec_rd.rd02 = rec_ps.ps01
             WHERE
                 rd03 > '{0}' AND
