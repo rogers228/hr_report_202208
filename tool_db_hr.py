@@ -309,6 +309,22 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def ymdGersv2_df(self, ymdh1, ymdh2):
+        # ymd1 年月日時8碼 起
+        # ymd2 年月日時8碼 迄
+        s = """
+            SELECT sv01,ps02,sv03,sv04
+            FROM rec_sv LEFT JOIN rec_ps ON sv02=ps01
+            WHERE
+                sv03 >= '{0}'AND
+                sv03 <= '{1}'AND
+                (sv04 = 1 OR sv04 = 2 OR sv04 = 3 OR sv04 = 6 OR sv04 = 7)
+            ORDER BY sv03 ASC
+            """
+        s = s.format(ymdh1, ymdh2)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def wGerpf_df(self, whereSTR=''):
         # 薪資項目明細
         s = """
@@ -373,17 +389,7 @@ def test2(): #添加欄位
 def test1():
     # new id
     hr = db_hr()
-    # df = hr.ymGetrs_df('202207')
-    # pd.set_option('display.max_rows', df.shape[0]+1) # 顯示最多列
-    # pd.set_option('display.max_columns', None) #顯示最多欄位    
-    # print(df)
-
-    # print(hr.Gersw_6_df(hr.nogetId('AA0094'), '2022'))
-    # whereSTR = "pa08 IN ('0010','0020','0030','0040','0050','0060','0070','0210','0220','A001')"
-    # df_rd = hr.wGerpf_df(whereSTR)
-    # print(df_rd)
-    # df = hr.wuGetrs_df('202207','')
-    df = hr.test1()
+    df = hr.ymdGersv2_df('20220201','20230302')
     print(df)
 
 if __name__ == '__main__':
