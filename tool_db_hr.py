@@ -375,6 +375,27 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def test(self):
+        # s = """
+        #     SELECT TOP 100 rd01,rd02,ps02,ps03
+        #     FROM rec_rd LEFT JOIN rec_ps ON rd02 = ps01
+        #     WHERE ps02 LIKE '%AA0385%'
+        #     ORDER BY ps02 ASC
+        #     """
+        s = """
+            SELECT TOP 100 sv01,sv02,ps02,ps03
+            FROM rec_sv LEFT JOIN rec_ps ON sv02 = ps01
+            WHERE ps02 LIKE '%AA0385%'
+            ORDER BY ps02 ASC
+            """
+        df = pd.read_sql(s, self.cn) #轉pd
+        print(df)
+        # return df if len(df.index) > 0 else None
+
+def test3():
+    hr = db_hr()
+    hr.test()
+
 def test2(): #添加欄位
     pass
     # hr = db_hr()
@@ -393,5 +414,5 @@ def test1():
     print(df)
 
 if __name__ == '__main__':
-    test1()        
+    test3()        
     print('ok')
