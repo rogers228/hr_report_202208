@@ -383,11 +383,12 @@ class db_hr(): #讀取excel 單一零件
         #     ORDER BY ps02 ASC
         #     """
         s = """
-            SELECT TOP 100 sv01,sv02,ps02,ps03
-            FROM rec_sv LEFT JOIN rec_ps ON sv02 = ps01
-            WHERE ps02 LIKE '%AA0385%'
-            ORDER BY ps02 ASC
+            SELECT br01,br02,br03
+            FROM rec_br
+            WHERE br02 LIKE '%202310%' AND br01 = 7
+            ORDER BY br02
             """
+
         df = pd.read_sql(s, self.cn) #轉pd
         print(df)
         # return df if len(df.index) > 0 else None
@@ -410,8 +411,8 @@ def test2(): #添加欄位
 def test1():
     # new id
     hr = db_hr()
-    df = hr.ymdGersv2_df('20220201','20230302')
-    print(df)
+    df = hr.test()
+
 
 if __name__ == '__main__':
     test3()        
