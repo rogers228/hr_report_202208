@@ -85,3 +85,4 @@ if __name__ == '__main__':
     main()
     # cmd
     # C:\python_venv\python.exe \\220.168.100.104\pdm\python_program\hr_report_202208\rpt_main.py -report_name sav07
+    # C:\python_venv\python.exe \\220.168.100.104\pdm\python_program\hr_report_202208\rpt_main.py -report_name sav08 -ymd=20241112 -h1=07 -h2=09
