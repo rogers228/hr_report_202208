@@ -72,7 +72,7 @@ class Report_sav06(tool_excel):
             self.c_write(cr, 4, r['rd12'], font_A_10, alignment = ah_wr, border=bottom_border) #備註
             color =  cf_yellow if r['rd07'] > 0 else cf_none
             if '未結算' in r['rd12']:
-                color = cf_none            
+                color = cf_none
             v = r['rd07']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 5, v, f2, border=bottom_border, fillcolor = color) # 缺勤
 
             v = r['rd06']; f2 = font['gray' if v == 0 else 'black']; self.c_write(cr, 6, v, f2, border=bottom_border) # 出勤
@@ -85,7 +85,7 @@ class Report_sav06(tool_excel):
 
 def test1():
     fileName = 'sav06' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav06(fileName, 'AA0022', '2022')
+    Report_sav06(fileName, 'AA0022', '2025')
     print('ok')
 
 if __name__ == '__main__':

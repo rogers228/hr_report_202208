@@ -111,7 +111,7 @@ class Report_sav05(tool_excel):
                         rd11 += '\n' + gStr
                 else:
                     rd11 = ''; color = cf_none
-                
+
                 self.c_write(cr, d+2, rd11, font_A_10, alignment=ah_wr, border=bottom_border, fillcolor = color)
             cr += 1
 
@@ -120,7 +120,7 @@ class Report_sav05(tool_excel):
 
 def test1():
     fileName = 'sav05' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav05(fileName, '202208')
+    Report_sav05(fileName, '202510')
     print('ok')
 
 if __name__ == '__main__':

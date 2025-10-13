@@ -2,7 +2,7 @@ if True:
     import sys, custom_path
     config_path = custom_path.custom_path['hr_report_202208'] # 取得專案引用路徑
     sys.path.append(config_path) # 載入專案路徑
-    
+
 import pandas as pd
 # import pyodbc
 from sqlalchemy.engine import URL
@@ -136,7 +136,7 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df.iloc[0]['ca03'] if len(df.index) > 0 else ''
 
-    def cpGer_qs_lis(self, qs01): # qs01使用者代號或設備代號 查詢權限 list 
+    def cpGer_qs_lis(self, qs01): # qs01使用者代號或設備代號 查詢權限 list
         s = "SELECT qs02 FROM rec_qs WHERE qs01 ='{0}'"
         s = s.format(qs01)
         df = pd.read_sql(s, self.rpt) #轉pd
@@ -202,7 +202,7 @@ class db_hr(): #讀取excel 單一零件
         # ym 年月日6碼
         s = """
             SELECT rs01,ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
-            FROM rec_ps 
+            FROM rec_ps
                 LEFT JOIN rec_rs ON ps01=rs02
             WHERE rs03 LIKE '{0}%'
             ORDER BY ps02 ASC
@@ -225,7 +225,7 @@ class db_hr(): #讀取excel 單一零件
             userno_inSTR = "('" + "','".join(userno_arr.split(',')) + "')"
         s = """
             SELECT rs01,ps02,ps03,ps40,rs02,rs08,rs10,rs11,rs12
-            FROM rec_ps 
+            FROM rec_ps
                 LEFT JOIN rec_rs ON ps01=rs02
             WHERE rs03 LIKE '{0}%'
             WHEREPLACESTR
@@ -395,7 +395,8 @@ class db_hr(): #讀取excel 單一零件
 
 def test3():
     hr = db_hr()
-    hr.test()
+    df = hr.userGetrd_df('AA0031', '2025')
+    print(df)
 
 def test2(): #添加欄位
     pass
@@ -415,5 +416,5 @@ def test1():
 
 
 if __name__ == '__main__':
-    test3()        
+    test3()
     print('ok')
