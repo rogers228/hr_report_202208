@@ -120,7 +120,7 @@ class Report_sav05(tool_excel):
 
 def test1():
     fileName = 'sav05' + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
-    Report_sav05(fileName, '202510')
+    Report_sav05(fileName, '202512')
     print('ok')
 
 if __name__ == '__main__':

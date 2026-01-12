@@ -2,15 +2,15 @@ if True:
     import sys, custom_path
     config_path = custom_path.custom_path['hr_report_202208'] # 取得專案引用路徑
     sys.path.append(config_path) # 載入專案路徑
-    
+
 from openpyxl.styles import Alignment, Font
 from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import PatternFill
 
 if True: # border
-    thin_border = Border(left=Side(style='thin'), 
-                        right=Side(style='thin'), 
-                        top=Side(style='thin'), 
+    thin_border = Border(left=Side(style='thin'),
+                        right=Side(style='thin'),
+                        top=Side(style='thin'),
                         bottom=Side(style='thin'))
 
     bottom_border = Border(bottom=Side(style='thin'))
@@ -19,8 +19,8 @@ if True: # border
     bottom_border_sk = Border(bottom=Side(style='dotted'))
     none_border = Side(border_style=None)
     no_border = Border(
-        left = none_border, 
-        right = none_border, 
+        left = none_border,
+        right = none_border,
         top = none_border,
         bottom = none_border,
     )
@@ -48,6 +48,7 @@ if True: # font
     font_11B_link_ab = Font(size = "11", bold=True, color='C70BB3')
     font_11B_link_pdm = Font(size = "11", bold=True, color='00751E')
     font_12 = Font(size = "12")
+    font_A_12 = Font(name = "Arial" ,size = "12")
     font_14BI = Font(size = "14", bold=True, italic=True)
     font_16I = Font(size = "16", italic=True)
     font_18B = Font(size = "18", bold=True)
@@ -73,11 +74,11 @@ if True: # Alignment
     ah_top_wr = Alignment(vertical='top', wrapText=True)  #自動換行
     ah_center_top = Alignment(horizontal='center', vertical ='top')
     ah_center_bottom = Alignment(horizontal='center', vertical ='bottom')
-    
+
 if True: # color fill 填滿顏色
     cf_none = PatternFill(fill_type=None) #不填滿
     cf_yellow = PatternFill(start_color="FFFF00",  fill_type = "solid")  # 黃色
     cf_gray = PatternFill(start_color="CACACA",  fill_type = "solid")    # 灰色
     cf_blue = PatternFill(start_color="3CCEFF",  fill_type = "solid")    # 藍色
     cf_khaki = PatternFill(start_color="F0B000",  fill_type = "solid")    # 土黃色
-    cf_green = PatternFill(start_color="C3F069",  fill_type = "solid")    # 綠色    
+    cf_green = PatternFill(start_color="C3F069",  fill_type = "solid")    # 綠色

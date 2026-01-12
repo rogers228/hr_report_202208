@@ -182,6 +182,21 @@ class db_hr(): #讀取excel 單一零件
         df = pd.read_sql(s, self.cn) #轉pd
         return df if len(df.index) > 0 else None
 
+    def userym_Getrd_df(self, userno, ym):
+        # ym 年月日6碼
+        # userno 工號
+        s = """
+            SELECT rd02,ps02,ps03,rd03,rd11
+            FROM rec_rd LEFT JOIN rec_ps ON rd02 = ps01
+            WHERE
+                ps02 LIKE '{0}' AND
+                rd03 LIKE '{1}%'
+            ORDER BY rd03 ASC
+            """
+        s = s.format(userno, ym)
+        df = pd.read_sql(s, self.cn) #轉pd
+        return df if len(df.index) > 0 else None
+
     def userGetrd_df(self, userno, year):
         # userno 工號
         # year 4碼
@@ -395,7 +410,10 @@ class db_hr(): #讀取excel 單一零件
 
 def test3():
     hr = db_hr()
-    df = hr.userGetrd_df('AA0031', '2025')
+    # df = hr.userGetrd_df('AA0031', '2025')
+    df = hr.userym_Getrd_df('AA0031', '202512')
+    pd.set_option('display.max_rows', df.shape[0]+1) # 顯示最多列
+    pd.set_option('display.max_columns', None) #顯示最多欄位
     print(df)
 
 def test2(): #添加欄位

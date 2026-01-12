@@ -6,7 +6,7 @@ if True:
 import os, time
 import click
 import tool_auth
-import rpt_sav01, rpt_sav02, rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08, rpt_sav09
+import rpt_sav01, rpt_sav02, rpt_sav03, rpt_sav04, rpt_sav05, rpt_sav06, rpt_sav07, rpt_sav08, rpt_sav09, rpt_sav10
 
 @click.command() # 命令行入口
 @click.option('-report_name', help='report name', required=True, type=str) # required 必要的
@@ -47,6 +47,7 @@ def main(report_name, userno='',
            'sav07': sav07,
            'sav08': sav08,
            'sav09': sav09,
+           'sav10': sav10,
           }
 
     func = dic.get(report_name, None)
@@ -79,6 +80,9 @@ def sav08(): # 出勤狀況表(當日)  看訂便當人數
 
 def sav09(): # 人員基本資料
     rpt_sav09.Report_sav09(fileName, whereStr)
+
+def sav10(): # 加班確認表(月)
+    rpt_sav10.Report_sav10(fileName, usernoStr, ymStr)
 
 if __name__ == '__main__':
     # main('sav07') # debug
